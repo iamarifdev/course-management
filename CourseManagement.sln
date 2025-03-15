@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.Infrastruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.API", "src\CourseManagement.API\CourseManagement.API.csproj", "{008F7939-EDE6-4CBF-880B-5433F294CE07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.Application", "src\CourseManagement.Application\CourseManagement.Application.csproj", "{91C98584-597E-4926-9641-55D49702444B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{008F7939-EDE6-4CBF-880B-5433F294CE07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{008F7939-EDE6-4CBF-880B-5433F294CE07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{008F7939-EDE6-4CBF-880B-5433F294CE07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C98584-597E-4926-9641-55D49702444B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C98584-597E-4926-9641-55D49702444B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C98584-597E-4926-9641-55D49702444B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C98584-597E-4926-9641-55D49702444B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
