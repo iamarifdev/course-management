@@ -14,8 +14,19 @@ public record Password(string Value)
         }
         catch (SaltParseException)
         {
-            // TODO: log it
-            return Result.Failure<Password>(PasswordErrors.SaltParsingError);
+            return Result.Failure<Password>(UserErrors.UnableToParsePasswordSalt);
+        }
+    }
+
+    public static Result<bool> VerifyHash(string password, string passwordHash)
+    {
+        try
+        {
+            return BCrypt.Net.BCrypt.Verify(password, passwordHash);
+        }
+        catch (SaltParseException)
+        {
+            return Result.Failure<bool>(UserErrors.InvalidCredentials);
         }
     }
 }
