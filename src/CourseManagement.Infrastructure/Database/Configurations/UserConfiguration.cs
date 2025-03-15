@@ -14,8 +14,14 @@ public class UserConfiguration : BaseEntityTypeConfiguration<User>
 
         builder.OwnsOne(x => x.Name, nameBuilder =>
         {
-            nameBuilder.Property(n => n.FirstName).HasMaxLength(100).IsRequired();
-            nameBuilder.Property(n => n.LastName).HasMaxLength(100).IsRequired();
+            nameBuilder.Property(n => n.FirstName)
+                .HasColumnName("first_name")
+                .HasMaxLength(100)
+                .IsRequired();
+            nameBuilder.Property(n => n.LastName)
+                .HasColumnName("last_name")
+                .HasMaxLength(100)
+                .IsRequired();
         });
 
         builder.Property(x => x.Email)
@@ -34,6 +40,6 @@ public class UserConfiguration : BaseEntityTypeConfiguration<User>
 
         builder.HasIndex(x => x.Email)
             .IsUnique()
-            .HasFilter("\"IsDeleted\" = false");
+            .HasFilter("\"is_deleted\" = false");
     }
 }

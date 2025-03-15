@@ -9,6 +9,7 @@ public sealed class ApplicationDbContext(DbContextOptions options) : DbContext(o
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.HasDefaultSchema(Schemas.Default);
 
         base.OnModelCreating(modelBuilder);
     }

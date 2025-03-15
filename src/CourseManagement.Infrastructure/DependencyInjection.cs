@@ -28,7 +28,9 @@ public static class DependencyInjection
         });
 
         #region Repositories
+
         services.AddScoped<IUserRepository, UserRepository>();
+
         #endregion
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
