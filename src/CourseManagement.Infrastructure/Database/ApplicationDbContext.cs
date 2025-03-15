@@ -1,11 +1,14 @@
+using CourseManagement.Application.Exceptions;
 using CourseManagement.Domain.Base;
-using CourseManagement.Infrastructure.Database.Configurations;
+using CourseManagement.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseManagement.Infrastructure.Database;
 
 public sealed class ApplicationDbContext(DbContextOptions options) : DbContext(options), IUnitOfWork
 {
+    public DbSet<User> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
@@ -23,8 +26,7 @@ public sealed class ApplicationDbContext(DbContextOptions options) : DbContext(o
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            // TODO: add ConcurrencyException
-            throw;
+            throw new ConcurrencyException("Concurrency error occurred.", ex);
         }
     }
 
