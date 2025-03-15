@@ -12,5 +12,7 @@ public static class BuilderServicesExtension
         using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
         dbContext.Database.Migrate();
+        
+        dbContext.Seed();
     }
 }
