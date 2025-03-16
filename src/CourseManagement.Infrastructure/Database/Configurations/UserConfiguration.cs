@@ -30,7 +30,7 @@ public class UserConfiguration : BaseEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(x => x.Password)
-            .HasMaxLength(60)
+            .HasMaxLength(100)
             .HasConversion(password => password.Value, value => new Password(value))
             .IsRequired();
 

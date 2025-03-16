@@ -1,9 +1,11 @@
+using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Users;
 using CourseManagement.Infrastructure.Authentication;
 using CourseManagement.Infrastructure.Database;
 using CourseManagement.Infrastructure.Database.Repositories;
+using CourseManagement.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +17,7 @@ public static class DependencyInjection
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddTransient<IPasswordHasher, PasswordHasher>();
         services
             .AddPersistence(configuration)
             .AddAuthentication(configuration);

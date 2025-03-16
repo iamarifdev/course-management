@@ -1,3 +1,4 @@
+using CourseManagement.Application.Base;
 using CourseManagement.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,9 @@ public static class BuilderServicesExtension
         using var scope = app.ApplicationServices.CreateScope();
 
         using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
         dbContext.Database.Migrate();
         
-        dbContext.Seed();
+        var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+        dbContext.Seed(passwordHasher);
     }
 }
