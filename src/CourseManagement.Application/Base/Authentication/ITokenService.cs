@@ -8,6 +8,4 @@ public interface ITokenService
 {
     string GenerateAccessToken(Guid userId, Email email, Role role);
     string GenerateRefreshToken();
-    bool ValidateToken(string token);
-    ClaimsPrincipal GetClaimsPrincipal(string token);
 }

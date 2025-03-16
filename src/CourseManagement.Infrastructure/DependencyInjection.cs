@@ -1,3 +1,4 @@
+using System.Text;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Domain.Base;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CourseManagement.Infrastructure;
 
@@ -20,7 +22,8 @@ public static class DependencyInjection
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services
             .AddPersistence(configuration)
-            .AddAuthentication(configuration);
+            .AddAuthentication(configuration)
+            .AddAuthorization();
     }
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
@@ -43,11 +46,46 @@ public static class DependencyInjection
         return services;
     }
 
-    private static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                var jwtConfig = configuration.GetSection(nameof(JwtConfiguration)).Get<JwtConfiguration>();
+                if (jwtConfig == null) throw new InvalidOperationException("JWT config is not found");
+
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)),
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                    ValidAudiences = [jwtConfig.Audience],
+                    ValidIssuer = jwtConfig.Issuer,
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        if (context.Principal is not null)
+                        {
+                            context.HttpContext.User = context.Principal;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
         services.Configure<JwtConfiguration>(configuration.GetSection(nameof(JwtConfiguration)));
 
@@ -56,5 +94,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
 
         services.AddScoped<IUserContext, UserContext>();
+        
+        return services;
     }
 }

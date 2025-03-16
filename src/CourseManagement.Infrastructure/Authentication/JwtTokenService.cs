@@ -45,14 +45,4 @@ public class JwtTokenService(IOptions<JwtConfiguration> jwtConfigurationOption) 
         randomNumberGenerator.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
     }
-
-    public bool ValidateToken(string token)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ClaimsPrincipal GetClaimsPrincipal(string token)
-    {
-        throw new NotImplementedException();
-    }
 }

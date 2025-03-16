@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace CourseManagement.Infrastructure.Authentication;
 
@@ -7,7 +6,7 @@ internal static class ClaimsPrincipalExtensions
 {
     public static Guid GetUserId(this ClaimsPrincipal? principal)
     {
-        var userId = principal?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        var userId = principal?.FindFirstValue(ClaimTypes.NameIdentifier);
 
         return Guid.TryParse(userId, out var parsedUserId) ?
             parsedUserId :
@@ -16,7 +15,7 @@ internal static class ClaimsPrincipalExtensions
 
     public static string GetUserEmail(this ClaimsPrincipal? principal)
     {
-        return principal?.FindFirstValue(JwtRegisteredClaimNames.Email) ??
+        return principal?.FindFirstValue(ClaimTypes.Email) ??
                throw new ApplicationException("User email is unavailable");
     }
 

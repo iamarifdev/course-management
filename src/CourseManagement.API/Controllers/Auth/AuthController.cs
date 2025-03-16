@@ -1,3 +1,4 @@
+using CourseManagement.Application.Users.GetLoggedInUser;
 using CourseManagement.Application.Users.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,17 @@ public class AuthController(ISender sender) : ControllerBase
         {
             return Unauthorized(result.Error);
         }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
+    {
+        var query = new GetLoggedInUserQuery();
+
+        var result = await sender.Send(query, cancellationToken);
 
         return Ok(result.Value);
     }
