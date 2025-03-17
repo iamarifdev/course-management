@@ -1,6 +1,6 @@
 namespace CourseManagement.Application.Users;
 
-public class UserErrorCodes
+public static class UserErrorCodes
 {
     public static class LoginUser
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CourseManagement.API;
 
-public static class BuilderServicesExtension
+internal static class BuilderServicesExtension
 {
     public static void ApplyMigrations(this IApplicationBuilder app)
     {
