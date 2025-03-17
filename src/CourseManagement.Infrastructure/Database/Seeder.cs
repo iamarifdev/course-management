@@ -12,7 +12,10 @@ public static class Seeder
 
     public static void Seed(this ApplicationDbContext context, IPasswordHasher passwordHasher)
     {
-        if (context.Users.Any()) return;
+        if (context.Users.Any())
+        {
+            return;
+        }
 
         var hashedPassword = passwordHasher.Hash(StaffPassword).Value;
 

@@ -13,12 +13,9 @@ public sealed class User : Entity
         Password = password;
     }
 
-#pragma warning disable CS8618, CS9264
-    // Require by EF Core to run the app without any error
     private User()
     {
     }
-#pragma warning restore CS8618, CS9264
 
     public Name Name { get; private set; }
     public Email Email { get; private set; }

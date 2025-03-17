@@ -17,4 +17,7 @@ public record Error(string Code, string Description, ErrorType Type)
 
     public static Error Problem(string code, string description) =>
         new(code, description, ErrorType.Problem);
+
+    public static Error Conflict(string code, string description) =>
+        new(code, description, ErrorType.Conflict);
 }

@@ -1,9 +1,7 @@
-using CourseManagement.Domain.Users;
+using CourseManagement.Domain.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseManagement.Infrastructure.Database.Repositories;
-
-using Domain.Base;
-using Microsoft.EntityFrameworkCore;
 
 internal abstract class Repository<TEntity>(ApplicationDbContext dbContext) where TEntity : Entity
 {

@@ -1,9 +1,9 @@
 using CourseManagement.Domain.Base;
 
-namespace CourseManagement.Infrastructure.Database.Configurations;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace CourseManagement.Infrastructure.Database.Configurations;
 
 public abstract class BaseEntityTypeConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : Entity
 {
@@ -21,6 +21,6 @@ public abstract class BaseEntityTypeConfiguration<TEntity> : IEntityTypeConfigur
             .IsRequired()
             .HasDefaultValue(false);
 
-        builder.HasQueryFilter(e => !e.IsDeleted);
+        builder.HasQueryFilter(x => !x.IsDeleted);
     }
 }

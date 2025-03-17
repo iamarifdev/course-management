@@ -37,7 +37,7 @@ public class UserConfiguration : BaseEntityTypeConfiguration<User>
         builder.Property(x => x.Role)
             .HasConversion(role => role.ToString(), value => Enum.Parse<Role>(value))
             .IsRequired();
-
+        
         builder.HasIndex(x => x.Email)
             .IsUnique()
             .HasFilter("\"is_deleted\" = false");

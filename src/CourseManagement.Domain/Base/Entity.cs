@@ -14,8 +14,8 @@ public abstract class Entity
     }
 
     public Guid Id { get; init; }
-    public bool IsDeleted { get; private set; } = false;
-    public DateTime CreatedAt { get; }
+    public bool IsDeleted { get; private set; }
+    public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
     public void SetUpdatedAt() => UpdatedAt = DateTime.UtcNow;

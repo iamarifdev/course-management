@@ -2,7 +2,7 @@ using CourseManagement.Domain.Base;
 
 namespace CourseManagement.Domain.Users;
 
-public class UserErrors
+public static class UserErrors
 {
     public static readonly Error UnableToHashPassword = Error.Failure(
         "User.UnableToHashPassword",

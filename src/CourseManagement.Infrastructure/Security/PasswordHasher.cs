@@ -37,7 +37,10 @@ public class PasswordHasher : IPasswordHasher
         try
         {
             var parts = hashedPassword.Split('-');
-            if (parts.Length != 2) return false;
+            if (parts.Length != 2)
+            {
+                return false;
+            }
 
             byte[] storedHash = Convert.FromHexString(parts[0]);
             byte[] storedSalt = Convert.FromHexString(parts[1]);

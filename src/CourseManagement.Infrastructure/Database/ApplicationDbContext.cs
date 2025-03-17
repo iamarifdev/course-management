@@ -1,5 +1,6 @@
 using CourseManagement.Application.Exceptions;
 using CourseManagement.Domain.Base;
+using CourseManagement.Domain.Courses;
 using CourseManagement.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace CourseManagement.Infrastructure.Database;
 public sealed class ApplicationDbContext(DbContextOptions options) : DbContext(options), IUnitOfWork
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Course> Courses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
