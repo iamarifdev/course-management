@@ -10,9 +10,9 @@ internal sealed class CreateCourseCommandHandler(
     IUserContext userContext,
     IUnitOfWork unitOfWork,
     ICourseRepository courseRepository)
-    : ICommandHandler<CreateCourseCommand, CourseResponse>
+    : ICommandHandler<CreateCourseCommand, Guid>
 {
-    public async Task<Result<CourseResponse>> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
     {
         var createdBy = userContext.UserId;
         var name = new Name(request.Name);
@@ -23,13 +23,13 @@ internal sealed class CreateCourseCommandHandler(
         var existingCourse = await courseRepository.GetByNameAsync(name, cancellationToken);
         if (existingCourse is not null)
         {
-            return Result.Failure<CourseResponse>(CourseErrors.CourseAlreadyExists);
+            return Result.Failure<Guid>(CourseErrors.CourseAlreadyExists);
         }
 
         courseRepository.Add(course);
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return new CourseResponse(course.Id);
+        return course.Id;
     }
 }

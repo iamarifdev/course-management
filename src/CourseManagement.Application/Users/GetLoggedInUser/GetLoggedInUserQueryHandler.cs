@@ -15,7 +15,6 @@ internal sealed class GetLoggedInUserQueryHandler(IUserRepository userRepository
         var user = await userRepository.GetByIdAsync(userContext.UserId, cancellationToken);
         if (user is null)
         {
-            // This should not happen unless the user is deleted but the token is still valid
             return Result.Failure<UserResponse>(UserErrors.UserNotFound);
         }
 

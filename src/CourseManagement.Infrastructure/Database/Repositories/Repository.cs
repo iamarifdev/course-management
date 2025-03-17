@@ -9,7 +9,7 @@ internal abstract class Repository<TEntity>(ApplicationDbContext dbContext) wher
     {
         return await dbContext
             .Set<TEntity>()
-            .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
     }
 
     public virtual void Add(TEntity entity) => dbContext.Add(entity);
