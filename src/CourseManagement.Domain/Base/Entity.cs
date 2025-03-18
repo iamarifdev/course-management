@@ -20,5 +20,8 @@ public abstract class Entity
 
     public void SetUpdatedAt() => UpdatedAt = DateTime.UtcNow;
     
+    /// <summary>
+    /// It allows to set the IsDeleted property to true, which is used to mark the entity as deleted.
+    /// </summary>
     public void SetDeleted() => IsDeleted = true;
 }

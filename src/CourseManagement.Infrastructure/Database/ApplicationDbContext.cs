@@ -15,6 +15,9 @@ public sealed class ApplicationDbContext(DbContextOptions options) : DbContext(o
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         modelBuilder.HasDefaultSchema(Schemas.Default);
+        
+        modelBuilder.Entity<User>().HasQueryFilter(user => !user.IsDeleted);
+        modelBuilder.Entity<Course>().HasQueryFilter(course => !course.IsDeleted);
 
         base.OnModelCreating(modelBuilder);
     }

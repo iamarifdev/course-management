@@ -1,5 +1,6 @@
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Courses.CreateCourse;
+using CourseManagement.Application.Courses.DeleteCourse;
 using CourseManagement.Application.Courses.GetCourseById;
 using CourseManagement.Application.Courses.GetCourses;
 using CourseManagement.Application.Courses.UpdateCourse;
@@ -65,5 +66,17 @@ public class CoursesController(ISender sender) : ControllerBase
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> DeleteCourseById(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteCourseCommand(id);
+
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok();
     }
 }
