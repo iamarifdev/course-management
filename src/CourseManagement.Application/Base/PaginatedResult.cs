@@ -1,4 +1,4 @@
-namespace CourseManagement.Domain.Base;
+namespace CourseManagement.Application.Base;
 
 public class PaginatedResult<T> where T : class
 {
@@ -6,7 +6,7 @@ public class PaginatedResult<T> where T : class
     public int TotalCount { get; init; }
     
     public int PageNumber { get; set; }
-    public int PageSize { get; set; }
+    public int PageSize { get; init; }
     
     public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
 }

@@ -1,7 +1,8 @@
+using CourseManagement.Application.Base;
 using CourseManagement.Application.Courses.CreateCourse;
 using CourseManagement.Application.Courses.GetCourseById;
 using CourseManagement.Application.Courses.GetCourses;
-using CourseManagement.Domain.Base;
+using CourseManagement.Application.Courses.UpdateCourse;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ public class CoursesController(ISender sender) : ControllerBase
     [HttpGet]
     [Authorize]
     public async Task<IActionResult> GetAllCourses(
-        [FromQuery] GetAllCoursesRequest request, 
+        [FromQuery] GetAllCoursesRequest request,
         CancellationToken cancellationToken)
     {
         var query = new GetCoursesQuery
@@ -26,12 +27,7 @@ public class CoursesController(ISender sender) : ControllerBase
         };
 
         var result = await sender.Send(query, cancellationToken);
-        if (result.IsFailure)
-        {
-            return NotFound(result.Error);
-        }
-
-        return Ok(result.Value);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
 
     [HttpGet("{id:guid}", Name = "GetCourseById")]
@@ -41,26 +37,33 @@ public class CoursesController(ISender sender) : ControllerBase
         var query = new GetCourseByIdQuery(id);
 
         var result = await sender.Send(query, cancellationToken);
-        if (result.IsFailure)
-        {
-            return NotFound(result.Error);
-        }
-
-        return Ok(result.Value);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
 
     [HttpPost]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> CreateCourse(CreateCourseRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateCourse(
+        CreateCourseRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new CreateCourseCommand(request.Name, request.Description);
 
         var result = await sender.Send(command, cancellationToken);
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Error);
-        }
+        return result.IsFailure
+            ? result.ToErrorResult()
+            : CreatedAtRoute("GetCourseById", new { id = result.Value }, null);
+    }
 
-        return CreatedAtRoute("GetCourseById", new { id = result.Value }, null);
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> UpdateCourseById(
+        Guid id,
+        UpdateCourseRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateCourseCommand(id, request.Name, request.Description);
+
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
 }

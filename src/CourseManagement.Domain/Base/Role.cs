@@ -6,8 +6,3 @@ public enum Role
     Student = 2
 }
 
-public static class Roles
-{
-    public const string Staff = "Staff";
-    public const string Student = "Student";
-}

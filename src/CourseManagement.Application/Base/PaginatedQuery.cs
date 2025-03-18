@@ -7,7 +7,7 @@ public interface IFilterableQuery
 
 public interface ISortableQuery
 {
-    string SortBy { get; set; }
+    string? SortBy { get; set; }
     bool SortDescending { get; set; }
 }
 

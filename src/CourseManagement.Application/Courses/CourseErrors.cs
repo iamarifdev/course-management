@@ -1,6 +1,6 @@
-using CourseManagement.Domain.Base;
+using CourseManagement.Application.Base;
 
-namespace CourseManagement.Domain.Courses;
+namespace CourseManagement.Application.Courses;
 
 public static class CourseErrors
 {

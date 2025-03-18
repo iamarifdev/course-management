@@ -1,4 +1,4 @@
-namespace CourseManagement.Domain.Base;
+namespace CourseManagement.Application.Base;
 
 public record Error(string Code, string Description, ErrorType Type)
 {

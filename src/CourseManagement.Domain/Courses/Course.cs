@@ -4,7 +4,7 @@ namespace CourseManagement.Domain.Courses;
 
 public sealed class Course : Entity
 {
-    public Course(string name, Guid createdBy, string? description)
+    private Course(Guid id, string name, Guid createdBy, string? description) : base(id)
     {
         Name = name;
         Description = description;
@@ -16,4 +16,16 @@ public sealed class Course : Entity
     public string Name { get; private set; }
     public string? Description { get; private set; }
     public Guid CreatedBy { get; private set; }
+
+    public void Update(string name, string? description)
+    {
+        Name = name;
+        Description = description;
+    }
+
+    public static Course Create(string name, Guid createdBy, string? description)
+    {
+        var course = new Course(Guid.NewGuid(), name, createdBy, description);
+        return course;
+    }
 }

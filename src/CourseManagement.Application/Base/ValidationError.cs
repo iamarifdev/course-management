@@ -1,4 +1,4 @@
-namespace CourseManagement.Domain.Base;
+namespace CourseManagement.Application.Base;
 
 public sealed record ValidationError(Error[] Errors) : Error(
     "Validation.General",
@@ -6,5 +6,5 @@ public sealed record ValidationError(Error[] Errors) : Error(
     ErrorType.Validation)
 {
     public static ValidationError FromResults(IEnumerable<Result> results) =>
-        new(results.Where(r => r.IsFailure).Select(r => r.Error).ToArray());
+        new([.. results.Where(r => r.IsFailure).Select(r => r.Error)]);
 }

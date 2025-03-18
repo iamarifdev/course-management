@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace CourseManagement.Domain.Base;
+namespace CourseManagement.Application.Base;
 
 public class Result
 {

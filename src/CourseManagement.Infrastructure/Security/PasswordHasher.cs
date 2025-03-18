@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using CourseManagement.Application.Base;
+using CourseManagement.Application.Users;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Users;
 

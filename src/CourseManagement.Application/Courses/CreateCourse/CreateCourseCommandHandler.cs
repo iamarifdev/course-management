@@ -14,7 +14,7 @@ internal sealed class CreateCourseCommandHandler(
     public async Task<Result<Guid>> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
     {
         var createdBy = userContext.UserId;
-        var course = new Course(request.Name, createdBy, request.Description);
+        var course = Course.Create(request.Name, createdBy, request.Description);
 
         var existingCourse = await courseRepository.GetByNameAsync(request.Name, cancellationToken);
         if (existingCourse is not null)
@@ -26,6 +26,6 @@ internal sealed class CreateCourseCommandHandler(
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return course.Id;
+        return Result.Success(course.Id);
     }
 }

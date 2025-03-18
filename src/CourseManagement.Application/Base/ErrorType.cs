@@ -1,4 +1,4 @@
-namespace CourseManagement.Domain.Base;
+namespace CourseManagement.Application.Base;
 
 public enum ErrorType
 {

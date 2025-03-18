@@ -15,4 +15,5 @@ internal abstract class Repository<TEntity>(ApplicationDbContext dbContext) wher
     }
 
     public virtual void Add(TEntity entity) => dbContext.Add(entity);
+    public virtual void Update(TEntity entity) => dbContext.Update(entity);
 }

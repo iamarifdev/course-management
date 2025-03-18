@@ -1,6 +1,6 @@
-using CourseManagement.Domain.Base;
+using CourseManagement.Application.Base;
 
-namespace CourseManagement.Domain.Users;
+namespace CourseManagement.Application.Users;
 
 public static class UserErrors
 {
@@ -20,7 +20,7 @@ public static class UserErrors
         "User.UserNotFoundByEmail",
         "The user with the specified email was not found");
 
-    public static readonly Error InvalidCredentials = Error.Problem(
+    public static readonly Error InvalidCredentials = Error.Failure(
         "User.InvalidCredentials",
         "The provided credentials are invalid");
 }

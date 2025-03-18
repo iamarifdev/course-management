@@ -27,7 +27,7 @@ internal sealed class GetCoursesQueryHandler(ICourseRepository repository)
         var items = await query
             .Skip(request.SkipItems)
             .Take(request.PageSize)
-            .Select(c => new CourseResponse(c.Id, c.Name, c.Description))
+            .Select(c => new CourseResponse(c.Id, c.Name, c.CreatedAt, c.Description, c.UpdatedAt))
             .ToListAsync(cancellationToken);
 
         var paginatedResult = new PaginatedResult<CourseResponse>
