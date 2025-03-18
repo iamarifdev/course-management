@@ -1,5 +1,4 @@
 using CourseManagement.Domain.Courses;
-using CourseManagement.Domain.Courses.ValueObjects;
 using CourseManagement.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,12 +13,10 @@ public class CourseConfiguration : BaseEntityTypeConfiguration<Course>
 
         builder.Property(x => x.Name)
             .HasMaxLength(100)
-            .HasConversion(name => name.Value, value => new Name(value))
             .IsRequired();
 
         builder.Property(x => x.Description)
             .HasMaxLength(250)
-            .HasConversion(description => description!.Value, value => new Description(value))
             .IsRequired(false);
         
         builder.Property(x => x.CreatedBy)

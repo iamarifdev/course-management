@@ -1,11 +1,10 @@
 using CourseManagement.Domain.Base;
-using CourseManagement.Domain.Courses.ValueObjects;
 
 namespace CourseManagement.Domain.Courses;
 
 public sealed class Course : Entity
 {
-    public Course(Name name, Guid createdBy, Description? description)
+    public Course(string name, Guid createdBy, string? description)
     {
         Name = name;
         Description = description;
@@ -14,7 +13,7 @@ public sealed class Course : Entity
 
     private Course() { }
 
-    public Name Name { get; private set; }
-    public Description? Description { get; private set; }
+    public string Name { get; private set; }
+    public string? Description { get; private set; }
     public Guid CreatedBy { get; private set; }
 }

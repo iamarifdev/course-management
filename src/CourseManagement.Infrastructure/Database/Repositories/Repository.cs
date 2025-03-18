@@ -5,6 +5,8 @@ namespace CourseManagement.Infrastructure.Database.Repositories;
 
 internal abstract class Repository<TEntity>(ApplicationDbContext dbContext) where TEntity : Entity
 {
+    public IQueryable<TEntity> GetQueryable() => dbContext.Set<TEntity>().AsNoTracking().AsQueryable();
+
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await dbContext

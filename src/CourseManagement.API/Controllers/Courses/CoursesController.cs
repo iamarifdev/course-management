@@ -1,5 +1,6 @@
 using CourseManagement.Application.Courses.CreateCourse;
 using CourseManagement.Application.Courses.GetCourseById;
+using CourseManagement.Application.Courses.GetCourses;
 using CourseManagement.Domain.Base;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,28 @@ namespace CourseManagement.API.Controllers.Courses;
 [Route("api/courses")]
 public class CoursesController(ISender sender) : ControllerBase
 {
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetAllCourses(
+        [FromQuery] GetAllCoursesRequest request, 
+        CancellationToken cancellationToken)
+    {
+        var query = new GetCoursesQuery
+        {
+            PageNumber = request.PageNumber,
+            PageSize = request.PageSize,
+            FilterText = request.FilterText,
+        };
+
+        var result = await sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
     [HttpGet("{id:guid}", Name = "GetCourseById")]
     [Authorize]
     public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
@@ -25,7 +48,7 @@ public class CoursesController(ISender sender) : ControllerBase
 
         return Ok(result.Value);
     }
-    
+
     [HttpPost]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> CreateCourse(CreateCourseRequest request, CancellationToken cancellationToken)
