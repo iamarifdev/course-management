@@ -1,18 +1,18 @@
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.CourseClasses;
 
-namespace CourseManagement.Domain.Courses;
+namespace CourseManagement.Domain.Classes;
 
-public class Course : Entity
+public class Class : Entity
 {
-    private Course(Guid id, string name, Guid createdBy, string? description) : base(id)
+    private Class(Guid id, string name, Guid createdBy, string? description) : base(id)
     {
         Name = name;
         Description = description;
         CreatedBy = createdBy;
     }
 
-    private Course() { }
+    private Class() { }
 
     public string Name { get; private set; }
     public string? Description { get; private set; }
@@ -26,9 +26,8 @@ public class Course : Entity
         Description = description;
     }
 
-    public static Course Create(string name, Guid createdBy, string? description)
+    public static Class Create(string name, Guid createdBy, string? description)
     {
-        var course = new Course(Guid.NewGuid(), name, createdBy, description);
-        return course;
+        return new Class(Guid.NewGuid(), name, createdBy, description);
     }
 }

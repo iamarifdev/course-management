@@ -40,6 +40,6 @@ public class UserConfiguration : BaseEntityTypeConfiguration<User>
         
         builder.HasIndex(x => x.Email)
             .IsUnique()
-            .HasFilter("\"is_deleted\" = false");
+            .HasIsDeletedFilter();
     }
 }
