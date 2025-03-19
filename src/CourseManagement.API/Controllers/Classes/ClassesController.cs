@@ -1,26 +1,26 @@
 using CourseManagement.Application.Base;
-using CourseManagement.Application.Courses.CreateCourse;
-using CourseManagement.Application.Courses.DeleteCourse;
-using CourseManagement.Application.Courses.GetCourseById;
-using CourseManagement.Application.Courses.GetCourses;
-using CourseManagement.Application.Courses.UpdateCourse;
+using CourseManagement.Application.Classes.CreateClass;
+using CourseManagement.Application.Classes.DeleteClass;
+using CourseManagement.Application.Classes.GetClassById;
+using CourseManagement.Application.Classes.GetClasses;
+using CourseManagement.Application.Classes.UpdateClass;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CourseManagement.API.Controllers.Courses;
+namespace CourseManagement.API.Controllers.Classes;
 
 [ApiController]
-[Route("api/courses")]
-public class CoursesController(ISender sender) : ControllerBase
+[Route("api/classes")]
+public class ClassesController(ISender sender) : ControllerBase
 {
     [HttpGet]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> GetAllCourses(
-        [FromQuery] GetAllCoursesRequest request,
+    public async Task<IActionResult> GetAllClasses(
+        [FromQuery] GetAllClassesRequest request,
         CancellationToken cancellationToken)
     {
-        var query = new GetCoursesQuery
+        var query = new GetClassesQuery
         {
             PageNumber = request.PageNumber,
             PageSize = request.PageSize,
@@ -31,11 +31,11 @@ public class CoursesController(ISender sender) : ControllerBase
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
 
-    [HttpGet("{id:guid}", Name = "GetCourseById")]
+    [HttpGet("{id:guid}", Name = "GetClassById")]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetClassById(Guid id, CancellationToken cancellationToken)
     {
-        var query = new GetCourseByIdQuery(id);
+        var query = new GetClassByIdQuery(id);
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
@@ -43,26 +43,26 @@ public class CoursesController(ISender sender) : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> CreateCourse(
-        CreateCourseRequest request,
+    public async Task<IActionResult> CreateClass(
+        CreateClassRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateCourseCommand(request.Name, request.Description);
+        var command = new CreateClassCommand(request.Name, request.CourseIds, request.Description);
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure
             ? result.ToErrorResult()
-            : CreatedAtRoute("GetCourseById", new { id = result.Value }, null);
+            : CreatedAtRoute("GetClassById", new { id = result.Value }, null);
     }
 
     [HttpPut("{id:guid}")]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> UpdateCourseById(
+    public async Task<IActionResult> UpdateClassById(
         Guid id,
-        UpdateCourseRequest request,
+        UpdateClassRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateCourseCommand(id, request.Name, request.Description);
+        var command = new UpdateClassCommand(id, request.Name, request.Description);
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
@@ -70,11 +70,11 @@ public class CoursesController(ISender sender) : ControllerBase
 
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> DeleteCourseById(
+    public async Task<IActionResult> DeleteClassById(
         Guid id,
         CancellationToken cancellationToken)
     {
-        var command = new DeleteCourseCommand(id);
+        var command = new DeleteClassCommand(id);
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok();

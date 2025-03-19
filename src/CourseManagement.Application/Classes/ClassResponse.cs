@@ -1,6 +1,6 @@
-namespace CourseManagement.Application.Courses.CreateCourse;
+namespace CourseManagement.Application.Classes;
 
-public sealed record CourseResponse(
+public sealed record ClassResponse(
     Guid Id,
     string Name,
     DateTime CreatedAt,

@@ -1,12 +1,14 @@
 using CourseManagement.Application.Base;
 using FluentValidation;
 
-namespace CourseManagement.Application.Courses.CreateCourse;
+namespace CourseManagement.Application.Courses.UpdateCourse;
 
-internal sealed class CreateCourseCommandValidator : AbstractValidator<CreateCourseCommand>
+internal sealed class UpdateCourseCommandValidator : AbstractValidator<UpdateCourseCommand>
 {
-    public CreateCourseCommandValidator()
+    public UpdateCourseCommandValidator()
     {
+        RuleFor(c => c.Id)
+            .NotEqual(Guid.Empty).WithErrorCode(CourseValidatorErrorCodes.EmptyId);
         RuleFor(c => c.Name)
             .NotEmpty().WithErrorCode(CourseValidatorErrorCodes.EmptyName)
             .Matches(Constants.AlphaNumericRegex).WithErrorCode(CourseValidatorErrorCodes.InvalidName)

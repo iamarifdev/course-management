@@ -2,6 +2,7 @@ using System.Text;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Domain.Base;
+using CourseManagement.Domain.Classes;
 using CourseManagement.Domain.Courses;
 using CourseManagement.Domain.Users;
 using CourseManagement.Infrastructure.Authentication;
@@ -32,12 +33,14 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Database") ??
                                throw new ArgumentNullException(nameof(configuration));
 
-        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
 
         #region Repositories
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IClassRepository, ClassRepository>();
 
         #endregion
 
