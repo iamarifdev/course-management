@@ -2,6 +2,7 @@ using CourseManagement.Application.Base;
 using CourseManagement.Application.Classes.CreateClass;
 using CourseManagement.Application.Classes.DeleteClass;
 using CourseManagement.Application.Classes.GetClassById;
+using CourseManagement.Application.Classes.GetClassCourses;
 using CourseManagement.Application.Classes.GetClasses;
 using CourseManagement.Application.Classes.UpdateClass;
 using MediatR;
@@ -26,6 +27,18 @@ public class ClassesController(ISender sender) : ControllerBase
             PageSize = request.PageSize,
             FilterText = request.FilterText,
         };
+
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+    
+    [HttpGet("{id:guid}/courses")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> GetClassCoursesById(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetClassCoursesQuery(id);
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);

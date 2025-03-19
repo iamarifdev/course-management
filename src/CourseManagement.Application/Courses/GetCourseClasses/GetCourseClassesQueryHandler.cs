@@ -17,19 +17,18 @@ internal sealed class GetCourseClassesQueryHandler(ICourseRepository repository)
                 s.Id,
                 s.Name,
                 s.Description,
-                s.CourseClasses
-                    .Select(c => new ClassResponse(
-                        c.Class.Id,
-                        c.Class.Name,
-                        c.Class.CreatedAt,
-                        c.Class.Description,
-                        c.UpdatedAt
-                    )).ToList(),
+                s.CourseClasses.Select(c => new ClassResponse(
+                    c.Class.Id,
+                    c.Class.Name,
+                    c.Class.CreatedAt,
+                    c.Class.Description,
+                    c.Class.UpdatedAt
+                )).ToList(),
                 s.CreatedAt,
                 s.UpdatedAt
             ))
             .FirstOrDefaultAsync(cancellationToken);
-        
+
         return course is null
             ? Result.Failure<CourseClassesResponse>(CourseErrors.CourseNotFound)
             : Result.Success(course);
