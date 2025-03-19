@@ -1,5 +1,3 @@
-using CourseManagement.Domain.Base;
-
 namespace CourseManagement.Application.Base;
 
 public interface IPasswordHasher

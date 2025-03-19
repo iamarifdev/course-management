@@ -1,6 +1,5 @@
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
-using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Users;
 
 namespace CourseManagement.Application.Users.GetLoggedInUser;

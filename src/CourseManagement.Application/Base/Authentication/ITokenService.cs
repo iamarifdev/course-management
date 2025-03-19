@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Users.ValueObjects;
 

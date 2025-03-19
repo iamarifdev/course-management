@@ -2,6 +2,7 @@ using CourseManagement.Application.Base;
 using CourseManagement.Application.Courses.CreateCourse;
 using CourseManagement.Application.Courses.DeleteCourse;
 using CourseManagement.Application.Courses.GetCourseById;
+using CourseManagement.Application.Courses.GetCourseClasses;
 using CourseManagement.Application.Courses.GetCourses;
 using CourseManagement.Application.Courses.UpdateCourse;
 using MediatR;
@@ -30,8 +31,20 @@ public class CoursesController(ISender sender) : ControllerBase
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
+    
+    [HttpGet("{id:guid}/classes")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> GetCourseClassesById(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetCourseClassesQuery(id);
 
-    [HttpGet("{id:guid}", Name = "GetCourseById")]
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+
+    [HttpGet("{id:guid}", Name = nameof(GetCourseById))]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
     {
@@ -52,7 +65,7 @@ public class CoursesController(ISender sender) : ControllerBase
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure
             ? result.ToErrorResult()
-            : CreatedAtRoute("GetCourseById", new { id = result.Value }, null);
+            : CreatedAtRoute(nameof(GetCourseById), new { id = result.Value }, null);
     }
 
     [HttpPut("{id:guid}")]

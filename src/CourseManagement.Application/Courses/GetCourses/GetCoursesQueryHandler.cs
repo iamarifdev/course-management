@@ -1,6 +1,4 @@
 using CourseManagement.Application.Base;
-using CourseManagement.Application.Courses.CreateCourse;
-using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Courses;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,5 +1,4 @@
 using CourseManagement.Application.Base;
-using CourseManagement.Application.Courses.CreateCourse;
 
 namespace CourseManagement.Application.Courses.GetCourseById;
 

@@ -1,4 +1,3 @@
-using CourseManagement.Domain.Base;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;

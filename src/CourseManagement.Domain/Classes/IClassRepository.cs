@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using CourseManagement.Domain.Base;
 
 namespace CourseManagement.Domain.Classes;

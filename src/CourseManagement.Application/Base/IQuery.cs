@@ -1,4 +1,3 @@
-using CourseManagement.Domain.Base;
 using MediatR;
 
 namespace CourseManagement.Application.Base;
