@@ -24,8 +24,8 @@ public sealed class Student : Entity
     public User User { get; set; }
     public Staff AddedBy { get; set; }
 
-    public static Student Create(Guid userId, string firstName, string lastName, Guid createdBy)
+    public static Student Create(Guid userId, string firstName, string lastName, Guid staffId)
     {
-        return new Student(Guid.NewGuid(), userId, firstName, lastName, createdBy);
+        return new Student(Guid.NewGuid(), userId, firstName, lastName, staffId);
     }
 }
