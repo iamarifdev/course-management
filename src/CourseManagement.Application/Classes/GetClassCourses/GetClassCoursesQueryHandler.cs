@@ -15,11 +15,11 @@ internal sealed class GetClassCoursesQueryHandler(IClassRepository repository)
             .Where(x => x.Id == request.Id)
             .Select(s => new ClassCoursesResponse(
                 s.Id,
-                s.Name,
+                s.Title,
                 s.Description,
                 s.CourseClasses.Select(c => new CourseResponse(
                     c.Course.Id,
-                    c.Course.Name,
+                    c.Course.Title,
                     c.Course.CreatedAt,
                     c.Course.Description,
                     c.Course.UpdatedAt

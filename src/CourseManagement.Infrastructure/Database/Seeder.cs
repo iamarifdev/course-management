@@ -22,7 +22,6 @@ public static class Seeder
         var hashedPassword = passwordHasher.Hash(StaffPassword).Value;
 
         var user = User.Create(
-            new Name("Test", "Staff"),
             new Email(StaffEmail),
             Role.Staff,
             new Password(hashedPassword)

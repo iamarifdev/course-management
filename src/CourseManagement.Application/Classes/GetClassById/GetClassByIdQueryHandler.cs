@@ -16,7 +16,7 @@ internal sealed class GetClassByIdQueryHandler(IClassRepository repository)
         
         return new ClassResponse(
             @class.Id,
-            @class.Name,
+            @class.Title,
             @class.CreatedAt,
             @class.Description,
             @class.UpdatedAt

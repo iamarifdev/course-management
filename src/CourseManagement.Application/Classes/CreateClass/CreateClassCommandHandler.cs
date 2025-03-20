@@ -29,7 +29,7 @@ internal sealed class CreateClassCommandHandler(
             return Result.Failure<Guid>(ClassErrors.InvalidCoursesAssociated(invalidIds));
         }
 
-        var isExists = await classRepository.ExistsAsync(x => x.Name == request.Name, cancellationToken);
+        var isExists = await classRepository.ExistsAsync(x => x.Title == request.Name, cancellationToken);
         if (isExists)
         {
             return Result.Failure<Guid>(ClassErrors.ClassAlreadyExists);

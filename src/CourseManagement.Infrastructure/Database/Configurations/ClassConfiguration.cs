@@ -1,17 +1,16 @@
 using CourseManagement.Domain.Classes;
-using CourseManagement.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CourseManagement.Infrastructure.Database.Configurations;
 
-public class ClassConfiguration : BaseEntityTypeConfiguration<Class>
+internal sealed class ClassConfiguration : BaseEntityTypeConfiguration<Class>
 {
     public override void Configure(EntityTypeBuilder<Class> builder)
     {
         builder.ToTable("classes");
 
-        builder.Property(x => x.Name)
+        builder.Property(x => x.Title)
             .HasMaxLength(100)
             .IsRequired();
 
@@ -19,18 +18,18 @@ public class ClassConfiguration : BaseEntityTypeConfiguration<Class>
             .HasMaxLength(250)
             .IsRequired(false);
 
-        builder.Property(x => x.CreatedBy)
+        builder.Property(x => x.StaffId)
             .IsRequired();
 
-        builder.HasOne<User>()
-            .WithMany()
-            .HasForeignKey(x => x.CreatedBy);
+        builder.HasOne(x => x.CreatedBy)
+            .WithMany(x => x.Classes)
+            .HasForeignKey(x => x.StaffId);
 
-        builder.HasMany(c => c.CourseClasses)
-            .WithOne(cc => cc.Class)
-            .HasForeignKey(cc => cc.ClassId);
+        builder.HasMany(x => x.CourseClasses)
+            .WithOne(x => x.Class)
+            .HasForeignKey(x => x.ClassId);
 
-        builder.HasIndex(x => x.Name)
+        builder.HasIndex(x => x.Title)
             .IsUnique()
             .HasIsDeletedFilter();
     }

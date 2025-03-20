@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CourseManagement.Infrastructure.Database.Configurations;
 
-public class CourseClassConfiguration : BaseEntityTypeConfiguration<CourseClass>
+internal sealed class CourseClassConfiguration : BaseEntityTypeConfiguration<CourseClass>
 {
     public override void Configure(EntityTypeBuilder<CourseClass> builder)
     {
@@ -16,16 +16,20 @@ public class CourseClassConfiguration : BaseEntityTypeConfiguration<CourseClass>
         builder.Property(x => x.ClassId)
             .IsRequired();
 
-        builder.Property(x => x.CreatedBy)
+        builder.Property(x => x.StaffId)
             .IsRequired();
         
-        builder.HasOne(cc => cc.Course)
-            .WithMany(c => c.CourseClasses)
-            .HasForeignKey(cc => cc.CourseId);
+        builder.HasOne(x => x.Course)
+            .WithMany(x => x.CourseClasses)
+            .HasForeignKey(x => x.CourseId);
 
-        builder.HasOne(cc => cc.Class)
-            .WithMany(c => c.CourseClasses)
-            .HasForeignKey(cc => cc.ClassId);
+        builder.HasOne(x => x.Class)
+            .WithMany(x => x.CourseClasses)
+            .HasForeignKey(x => x.ClassId);
+
+        builder.HasOne(x => x.CreatedBy)
+            .WithMany(x => x.CourseClasses)
+            .HasForeignKey(x => x.StaffId);
         
         builder.HasIndex(x => new { x.CourseId, x.ClassId })
             .IsUnique()

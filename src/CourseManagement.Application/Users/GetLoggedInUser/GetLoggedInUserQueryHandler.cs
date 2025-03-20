@@ -20,8 +20,9 @@ internal sealed class GetLoggedInUserQueryHandler(IUserRepository userRepository
         return new UserResponse(
             user.Id,
             user.Email.Value,
-            user.Name.FirstName,
-            user.Name.LastName
+            // TODO: add first name and last name
+            null,
+            null
         );
     }
 }

@@ -16,7 +16,7 @@ internal sealed class GetCourseByIdQueryHandler(ICourseRepository repository)
 
         return new CourseResponse(
             course.Id,
-            course.Name,
+            course.Title,
             course.CreatedAt,
             course.Description,
             course.UpdatedAt

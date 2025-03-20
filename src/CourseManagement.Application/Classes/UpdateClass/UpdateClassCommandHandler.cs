@@ -29,7 +29,7 @@ internal sealed class UpdateClassCommandHandler(IClassRepository repository, IUn
 
         var result = new ClassResponse(
             @class.Id,
-            @class.Name,
+            @class.Title,
             @class.CreatedAt,
             @class.Description,
             @class.UpdatedAt

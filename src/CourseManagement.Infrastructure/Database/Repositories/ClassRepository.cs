@@ -10,6 +10,6 @@ internal sealed class ClassRepository(ApplicationDbContext dbContext)
 
     public async Task<Class?> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
-        return await _dbContext.Classes.FirstOrDefaultAsync(c => c.Name == name, cancellationToken);
+        return await _dbContext.Classes.FirstOrDefaultAsync(c => c.Title == name, cancellationToken);
     }
 }

@@ -1,34 +1,36 @@
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.CourseClasses;
+using CourseManagement.Domain.Staffs;
 
 namespace CourseManagement.Domain.Courses;
 
-public class Course : Entity
+public sealed class Course : Entity
 {
-    private Course(Guid id, string name, Guid createdBy, string? description) : base(id)
+    private Course(Guid id, string title, Guid staffId, string? description) : base(id)
     {
-        Name = name;
+        Title = title;
         Description = description;
-        CreatedBy = createdBy;
+        StaffId = staffId;
+        CourseClasses = [];
     }
 
     private Course() { }
 
-    public string Name { get; private set; }
+    public string Title { get; private set; }
     public string? Description { get; private set; }
-    public Guid CreatedBy { get; private set; }
+    public Guid StaffId { get; private set; }
     
-    public virtual ICollection<CourseClass> CourseClasses { get; init; } = [];
+    public Staff CreatedBy { get; init; } = null!;
+    public ICollection<CourseClass> CourseClasses { get; init; } = [];
 
-    public void Update(string name, string? description)
+    public void Update(string title, string? description)
     {
-        Name = name;
+        Title = title;
         Description = description;
     }
 
     public static Course Create(string name, Guid createdBy, string? description)
     {
-        var course = new Course(Guid.NewGuid(), name, createdBy, description);
-        return course;
+        return new Course(Guid.NewGuid(), name, createdBy, description);
     }
 }
