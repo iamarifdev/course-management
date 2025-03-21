@@ -6,16 +6,17 @@ using CourseManagement.Domain.Students;
 using CourseManagement.Domain.Users;
 using CourseManagement.Domain.Users.ValueObjects;
 
-namespace CourseManagement.Application.Students.CreateStudent;
+namespace CourseManagement.Application.Students.AddStudent;
 
-internal sealed class CreateStudentCommandHandler(
+internal sealed class AddStudentCommandHandler(
     IUserContext userContext,
     IStudentRepository studentRepository,
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
-    IUnitOfWork unitOfWork) : ICommandHandler<CreateStudentCommand, Guid>
+    IUnitOfWork unitOfWork
+) : ICommandHandler<AddStudentCommand, Guid>
 {
-    public async Task<Result<Guid>> Handle(CreateStudentCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(AddStudentCommand request, CancellationToken cancellationToken)
     {
         var isExists = await userRepository.ExistsAsync(x => x.Email == new Email(request.Email), cancellationToken);
         if (isExists)

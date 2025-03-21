@@ -1,8 +1,8 @@
 using CourseManagement.Application.Base;
 
-namespace CourseManagement.Application.Students.CreateStudent;
+namespace CourseManagement.Application.Students.AddStudent;
 
-public sealed record CreateStudentCommand(
+public sealed record AddStudentCommand(
     string FirstName,
     string LastName,
     string Email,

@@ -7,9 +7,9 @@ internal sealed class LoginUserCommandValidator : AbstractValidator<LoginUserCom
     public LoginUserCommandValidator()
     {
         RuleFor(c => c.Email)
-            .NotEmpty().WithErrorCode(UserErrorCodes.LoginUser.EmptyEmail)
-            .EmailAddress().WithErrorCode(UserErrorCodes.LoginUser.InvalidEmail);
+            .NotEmpty().WithErrorCode(UserErrorCodes.EmptyEmail)
+            .EmailAddress().WithErrorCode(UserErrorCodes.InvalidEmail);
         RuleFor(c => c.Password)
-            .NotEmpty().WithErrorCode(UserErrorCodes.LoginUser.EmptyPassword);
+            .NotEmpty().WithErrorCode(UserErrorCodes.EmptyPassword);
     }
 }
