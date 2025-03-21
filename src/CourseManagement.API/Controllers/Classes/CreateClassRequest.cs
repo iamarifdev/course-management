@@ -1,3 +1,3 @@
 namespace CourseManagement.API.Controllers.Classes;
 
-public record CreateClassRequest(string Name, List<Guid> CourseIds, string? Description);
+public record CreateClassRequest(string Title, List<Guid> CourseIds, string? Description);

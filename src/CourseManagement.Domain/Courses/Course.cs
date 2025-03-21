@@ -29,8 +29,8 @@ public sealed class Course : Entity
         Description = description;
     }
 
-    public static Course Create(string title, Guid createdBy, string? description)
+    public static Course Create(string title, Guid staffId, string? description)
     {
-        return new Course(Guid.NewGuid(), title, createdBy, description);
+        return new Course(Guid.NewGuid(), title, staffId, description);
     }
 }

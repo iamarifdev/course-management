@@ -1,3 +1,3 @@
 namespace CourseManagement.API.Controllers.Courses;
 
-public sealed record UpdateCourseRequest(string Name, string? Description);
+public sealed record UpdateCourseRequest(string Title, string? Description);

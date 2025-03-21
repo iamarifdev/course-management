@@ -1,10 +1,9 @@
+using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Users.ValueObjects;
 
 namespace CourseManagement.Domain.Users;
 
-public interface IUserRepository
+public interface IUserRepository : IRepository<User>
 {
-    Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default);
-    void Add(User user);
 }

@@ -60,7 +60,7 @@ public class ClassesController(ISender sender) : ControllerBase
         CreateClassRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateClassCommand(request.Name, request.CourseIds, request.Description);
+        var command = new CreateClassCommand(request.Title, request.CourseIds, request.Description);
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure
@@ -75,7 +75,7 @@ public class ClassesController(ISender sender) : ControllerBase
         UpdateClassRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateClassCommand(id, request.Name, request.Description);
+        var command = new UpdateClassCommand(id, request.Title, request.Description);
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);

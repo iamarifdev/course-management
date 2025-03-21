@@ -1,17 +1,16 @@
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
-using CourseManagement.Domain.Users;
 
 namespace CourseManagement.Application.Users.GetLoggedInUser;
 
-internal sealed class GetLoggedInUserQueryHandler(IUserRepository userRepository, IUserContext userContext)
+internal sealed class GetLoggedInUserQueryHandler(IUserService userService, IUserContext userContext)
     : IQueryHandler<GetLoggedInUserQuery, UserResponse>
 {
     public async Task<Result<UserResponse>> Handle(
         GetLoggedInUserQuery request,
         CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(userContext.UserId, cancellationToken);
+        var user = await userService.GetUserInfoAsync(x => x.Id == userContext.UserId, cancellationToken);
         if (user is null)
         {
             return Result.Failure<UserResponse>(UserErrors.UserNotFound);
@@ -19,10 +18,11 @@ internal sealed class GetLoggedInUserQueryHandler(IUserRepository userRepository
 
         return new UserResponse(
             user.Id,
-            user.Email.Value,
-            // TODO: add first name and last name
-            null,
-            null
+            user.UserId,
+            user.Email,
+            user.FirstName,
+            user.LastName,
+            user.Department
         );
     }
 }

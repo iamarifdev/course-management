@@ -1,13 +1,17 @@
 using System.Text;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
+using CourseManagement.Application.Students;
+using CourseManagement.Application.Users;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Classes;
 using CourseManagement.Domain.Courses;
+using CourseManagement.Domain.Students;
 using CourseManagement.Domain.Users;
 using CourseManagement.Infrastructure.Authentication;
 using CourseManagement.Infrastructure.Database;
 using CourseManagement.Infrastructure.Database.Repositories;
+using CourseManagement.Infrastructure.Database.Services;
 using CourseManagement.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -41,8 +45,11 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICourseRepository, CourseRepository>();
         services.AddScoped<IClassRepository, ClassRepository>();
+        services.AddScoped<IStudentRepository, StudentRepository>();
 
         #endregion
+        
+        services.AddScoped<IUserService, UserService>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
         return services;

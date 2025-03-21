@@ -35,7 +35,7 @@ internal sealed class CreateClassCommandHandler(
             return Result.Failure<Guid>(ClassErrors.ClassAlreadyExists);
         }
 
-        var @class = Class.Create(request.Name, userContext.UserId, request.CourseIds, request.Description);
+        var @class = Class.Create(request.Name, userContext.StaffId, request.CourseIds, request.Description);
 
         classRepository.Add(@class);
         await unitOfWork.SaveChangesAsync(cancellationToken);

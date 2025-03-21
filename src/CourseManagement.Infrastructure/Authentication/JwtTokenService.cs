@@ -3,8 +3,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using CourseManagement.Application.Base.Authentication;
-using CourseManagement.Domain.Base;
-using CourseManagement.Domain.Users.ValueObjects;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,14 +12,15 @@ public class JwtTokenService(IOptions<JwtConfiguration> jwtConfigurationOption) 
 {
     private readonly JwtConfiguration _jwtConfiguration = jwtConfigurationOption.Value;
 
-    public string GenerateAccessToken(Guid userId, Email email, Role role)
+    public string GenerateAccessToken(Guid id, Guid userId, string email, string role)
     {
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, userId.ToString()),  
-            new(JwtRegisteredClaimNames.Email, email.Value),
+            new(JwtRegisteredClaimNames.Sub, userId.ToString()),
+            new(JwtRegisteredClaimNames.Email, email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.Role, role.ToString())
+            new(ClaimTypes.Role, role),
+            new(ClaimTypes.Sid, id.ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));

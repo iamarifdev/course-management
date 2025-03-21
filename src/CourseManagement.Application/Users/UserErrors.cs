@@ -15,6 +15,10 @@ public static class UserErrors
     public static readonly Error UserNotFound = Error.NotFound(
         "User.NotFound",
         "The user with the specified identifier was not found");
+    
+    public static readonly Error UserExists = Error.Conflict(
+        "User.Exists",
+        "The user with the specified identifier already exists");
 
     public static readonly Error UserNotFoundByEmail = Error.NotFound(
         "User.UserNotFoundByEmail",

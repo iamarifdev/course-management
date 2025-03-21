@@ -66,7 +66,7 @@ public static class Seeder
         // Seed Courses
         var courses = GetCourseTitles().Select(title => Course.Create(
             title: title,
-            createdBy: DefaultStaff.Id,
+            staffId: DefaultStaff.Id,
             description: title
         )).ToList();
         context.Courses.AddRange(courses);
