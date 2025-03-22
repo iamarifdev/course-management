@@ -1,5 +1,6 @@
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Students.AddStudent;
+using CourseManagement.Application.Students.DeleteStudent;
 using CourseManagement.Application.Students.GetStudentById;
 using CourseManagement.Application.Students.GetStudents;
 using MediatR;
@@ -51,5 +52,18 @@ public class StudentsController(ISender sender) : ControllerBase
         return result.IsFailure
             ? result.ToErrorResult()
             : CreatedAtRoute(nameof(GetStudentById), new { id = result.Value }, null);
+    }
+    
+
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> DeleteStudentById(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteStudentCommand(id);
+
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok();
     }
 }

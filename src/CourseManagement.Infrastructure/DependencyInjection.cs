@@ -1,7 +1,6 @@
 using System.Text;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
-using CourseManagement.Application.Students;
 using CourseManagement.Application.Users;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Classes;
