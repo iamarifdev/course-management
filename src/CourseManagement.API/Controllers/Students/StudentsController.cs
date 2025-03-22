@@ -1,6 +1,7 @@
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Students.AddStudent;
 using CourseManagement.Application.Students.GetStudentById;
+using CourseManagement.Application.Students.GetStudents;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,25 @@ namespace CourseManagement.API.Controllers.Students;
 [Route("api/students")]
 public class StudentsController(ISender sender) : ControllerBase
 {
+    [HttpGet]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> GetAllStudents(
+        [FromQuery] GetAllStudentsRequest request,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetStudentsQuery
+        {
+            PageNumber = request.PageNumber,
+            PageSize = request.PageSize,
+            FilterText = request.FilterText,
+            SortBy = request.SortBy,
+            SortOrder = request.SortOrder
+        };
+
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+    
     [HttpGet("{id:guid}", Name = nameof(GetStudentById))]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetStudentById(Guid id, CancellationToken cancellationToken)

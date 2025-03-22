@@ -20,7 +20,7 @@ internal sealed class GetClassesQueryHandler(IClassRepository repository)
 
         query = query.OrderBy(c => c.Title);
 
-        var count = await query.CountAsync(cancellationToken);
+        var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
             .Skip(request.SkipItems)
@@ -28,14 +28,6 @@ internal sealed class GetClassesQueryHandler(IClassRepository repository)
             .Select(c => new ClassResponse(c.Id, c.Title, c.CreatedAt, c.Description, c.UpdatedAt))
             .ToListAsync(cancellationToken);
 
-        var paginatedResult = new PaginatedResult<ClassResponse>
-        {
-            Items = items,
-            TotalCount = count,
-            PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-        };
-
-        return Result.Success(paginatedResult);
+        return Result.Success(items.ToPaginatedResult(totalCount, request));
     }
 }

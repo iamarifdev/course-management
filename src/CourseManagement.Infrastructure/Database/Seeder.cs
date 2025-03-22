@@ -1,5 +1,7 @@
+using System.Globalization;
 using Bogus;
 using CourseManagement.Application.Base;
+using CourseManagement.Application.Base.Extensions;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Classes;
 using CourseManagement.Domain.Courses;
@@ -97,7 +99,8 @@ public static class Seeder
             .CustomInstantiator(f =>
             {
                 var user = User.Create(
-                    new Email(f.Internet.Email(f.Name.FirstName(), f.Name.LastName())),
+                    new Email(f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
+                        .ToLowerCase()),
                     Role.Student,
                     new Password(PasswordHasher.Hash(StudentPassword).Value)
                 );

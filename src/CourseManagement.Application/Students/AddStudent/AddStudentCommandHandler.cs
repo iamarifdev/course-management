@@ -1,5 +1,6 @@
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
+using CourseManagement.Application.Base.Extensions;
 using CourseManagement.Application.Users;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Students;
@@ -18,7 +19,9 @@ internal sealed class AddStudentCommandHandler(
 {
     public async Task<Result<Guid>> Handle(AddStudentCommand request, CancellationToken cancellationToken)
     {
-        var isExists = await userRepository.ExistsAsync(x => x.Email == new Email(request.Email), cancellationToken);
+        var email = request.Email.ToLowerCase();
+        
+        var isExists = await userRepository.ExistsAsync(x => x.Email == new Email(email), cancellationToken);
         if (isExists)
         {
             return Result.Failure<Guid>(UserErrors.UserExists);
@@ -26,7 +29,7 @@ internal sealed class AddStudentCommandHandler(
 
         var hashedPassword = passwordHasher.Hash(request.Password).Value;
         var user = User.Create(
-            new Email(request.Email),
+            new Email(email),
             Role.Student,
             new Password(hashedPassword)
         );
