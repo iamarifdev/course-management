@@ -8,5 +8,6 @@ public interface IRepository<TEntity> where TEntity : Entity
     Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     void Add(TEntity entity);
+    void AddRange(IEnumerable<TEntity> entities);
     void Update(TEntity entity);
 }

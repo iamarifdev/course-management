@@ -18,7 +18,7 @@ internal sealed class CreateCourseCommandHandler(
         var existingCourse = await courseRepository.GetByNameAsync(request.Name, cancellationToken);
         if (existingCourse is not null)
         {
-            return Result.Failure<Guid>(CourseErrors.CourseAlreadyExists);
+            return Result.Failure<Guid>(CourseErrors.AlreadyExists);
         }
 
         courseRepository.Add(course);

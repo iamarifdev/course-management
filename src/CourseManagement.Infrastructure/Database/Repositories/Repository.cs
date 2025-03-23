@@ -23,5 +23,7 @@ internal abstract class Repository<TEntity>(ApplicationDbContext dbContext) : IR
     }
 
     public virtual void Add(TEntity entity) => dbContext.Add(entity);
+    public void AddRange(IEnumerable<TEntity> entities) => dbContext.AddRange(entities);
+
     public virtual void Update(TEntity entity) => dbContext.Update(entity);
 }

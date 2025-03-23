@@ -5,6 +5,8 @@ using CourseManagement.Application.Users;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Classes;
 using CourseManagement.Domain.Courses;
+using CourseManagement.Domain.StudentCourseClasses;
+using CourseManagement.Domain.StudentCourses;
 using CourseManagement.Domain.Students;
 using CourseManagement.Domain.Users;
 using CourseManagement.Infrastructure.Authentication;
@@ -45,7 +47,8 @@ public static class DependencyInjection
         services.AddScoped<ICourseRepository, CourseRepository>();
         services.AddScoped<IClassRepository, ClassRepository>();
         services.AddScoped<IStudentRepository, StudentRepository>();
-
+        services.AddScoped<IStudentCourseRepository, StudentCourseRepository>();
+        services.AddScoped<IStudentCourseClassRepository, StudentCourseClassRepository>();
         #endregion
         
         services.AddScoped<IUserService, UserService>();

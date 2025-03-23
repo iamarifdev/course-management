@@ -1,6 +1,8 @@
 using CourseManagement.Application.Base;
+using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Application.Courses.CreateCourse;
 using CourseManagement.Application.Courses.DeleteCourse;
+using CourseManagement.Application.Courses.EnrollStudentInCourse;
 using CourseManagement.Application.Courses.GetCourseById;
 using CourseManagement.Application.Courses.GetCourseClasses;
 using CourseManagement.Application.Courses.GetCourses;
@@ -14,7 +16,7 @@ namespace CourseManagement.API.Controllers.Courses;
 
 [ApiController]
 [Route("api/courses")]
-public class CoursesController(ISender sender) : ControllerBase
+public class CoursesController(ISender sender, IUserContext userContext) : ControllerBase
 {
     [HttpGet]
     [Authorize(Roles = Roles.Staff)]
@@ -32,7 +34,7 @@ public class CoursesController(ISender sender) : ControllerBase
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
-    
+
     [HttpGet("{id:guid}/classes")]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetCourseClassesById(Guid id, CancellationToken cancellationToken)
@@ -42,7 +44,7 @@ public class CoursesController(ISender sender) : ControllerBase
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
-    
+
     [HttpGet("{id:guid}/students")]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetCourseStudentsById(Guid id, CancellationToken cancellationToken)
@@ -51,6 +53,19 @@ public class CoursesController(ISender sender) : ControllerBase
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+
+    [HttpPost("{id:guid}/students")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> EnrollStudentInCourse(
+        Guid id,
+        EnrollStudentInCourseRequest request,
+        CancellationToken cancellationToken)
+    {
+        var query = new EnrollStudentInCourseCommand(id, Guid.Parse(request.StudentId), userContext.StaffId);
+
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok();
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetCourseById))]

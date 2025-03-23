@@ -19,7 +19,7 @@ internal sealed class UpdateCourseCommandHandler(ICourseRepository courseReposit
         var courseByName = await courseRepository.GetByNameAsync(request.Name, cancellationToken);
         if (courseByName is not null && courseByName.Id != course.Id)
         {
-            return Result.Failure<CourseResponse>(CourseErrors.CourseAlreadyExists);
+            return Result.Failure<CourseResponse>(CourseErrors.AlreadyExists);
         }
 
         course.Update(request.Name, request.Description);
