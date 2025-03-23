@@ -25,7 +25,7 @@ internal sealed class StudentCourseClassConfiguration : BaseEntityTypeConfigurat
         
         builder.HasOne(x => x.Course)
             .WithMany(x => x.EnrolledStudentClasses)
-            .HasForeignKey(x => x.ClassId);
+            .HasForeignKey(x => x.CourseId);
         
         builder.HasOne(x => x.Class)
             .WithMany(x => x.EnrolledStudentClasses)
@@ -39,7 +39,7 @@ internal sealed class StudentCourseClassConfiguration : BaseEntityTypeConfigurat
             .WithMany(x => x.EnrolledStudentClasses)
             .HasForeignKey(x => x.StaffId);
         
-        builder.HasIndex(x => new { x.StudentId, x.CourseId, x.ClassId })
+        builder.HasIndex(x => new { x.StudentId, x.ClassId })
             .IsUnique()
             .HasIsDeletedFilter();
     }
