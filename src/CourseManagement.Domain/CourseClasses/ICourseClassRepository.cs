@@ -1,7 +1,7 @@
+using CourseManagement.Domain.Base;
+
 namespace CourseManagement.Domain.CourseClasses;
 
-public interface ICourseClassRepository
+public interface ICourseClassRepository : IRepository<CourseClass>
 {
-    IQueryable<CourseClass> GetQueryable();
-    void Add(CourseClass courseClass);
 }

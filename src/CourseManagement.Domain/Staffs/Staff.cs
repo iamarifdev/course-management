@@ -2,6 +2,8 @@ using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Classes;
 using CourseManagement.Domain.CourseClasses;
 using CourseManagement.Domain.Courses;
+using CourseManagement.Domain.StudentCourseClasses;
+using CourseManagement.Domain.StudentCourses;
 using CourseManagement.Domain.Students;
 using CourseManagement.Domain.Users;
 
@@ -31,6 +33,8 @@ public sealed class Staff : Entity
     public ICollection<Class> Classes { get; init; } = [];
     public ICollection<CourseClass> CourseClasses { get; init; } = [];
     public ICollection<Student> Students { get; init; } = [];
+    public ICollection<StudentCourse> EnrolledStudentCourses { get; init; } = [];
+    public ICollection<StudentCourseClass> EnrolledStudentClasses { get; init; } = [];
 
     public static Staff Create(Guid userId, string? firstName, string? lastName, Guid? staffId, string department)
     {

@@ -1,5 +1,7 @@
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Staffs;
+using CourseManagement.Domain.StudentCourseClasses;
+using CourseManagement.Domain.StudentCourses;
 using CourseManagement.Domain.Users;
 
 namespace CourseManagement.Domain.Students;
@@ -23,6 +25,8 @@ public sealed class Student : Entity
 
     public User User { get; set; }
     public Staff AddedBy { get; set; }
+    public ICollection<StudentCourseClass> EnrolledClasses { get; init; } = [];
+    public ICollection<StudentCourse> EnrolledCourses { get; init; } = [];
 
     public static Student Create(Guid userId, string firstName, string lastName, Guid staffId)
     {

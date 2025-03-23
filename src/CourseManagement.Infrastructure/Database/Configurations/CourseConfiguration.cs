@@ -28,6 +28,10 @@ internal sealed class CourseConfiguration : BaseEntityTypeConfiguration<Course>
         builder.HasMany(x => x.CourseClasses)
             .WithOne(x => x.Course)
             .HasForeignKey(x => x.CourseId);
+        
+        builder.HasMany(x => x.EnrolledStudentCourses)
+            .WithOne(x => x.Course)
+            .HasForeignKey(x => x.CourseId);
 
         builder.HasIndex(x => x.Title)
             .IsUnique()

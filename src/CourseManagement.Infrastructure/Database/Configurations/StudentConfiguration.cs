@@ -31,6 +31,14 @@ internal sealed class StudentConfiguration : BaseEntityTypeConfiguration<Student
         builder.HasOne(x => x.AddedBy)
             .WithMany(x => x.Students)
             .HasForeignKey(x => x.StaffId);
+
+        builder.HasMany(x => x.EnrolledClasses)
+            .WithOne(x => x.Student)
+            .HasForeignKey(x => x.StudentId);
+
+        builder.HasMany(x => x.EnrolledCourses)
+            .WithOne(x => x.Student)
+            .HasForeignKey(x => x.StudentId);
         
         builder.HasIndex(x => x.UserId)
             .IsUnique()

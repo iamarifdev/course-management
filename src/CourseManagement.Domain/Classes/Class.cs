@@ -1,6 +1,7 @@
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.CourseClasses;
 using CourseManagement.Domain.Staffs;
+using CourseManagement.Domain.StudentCourseClasses;
 
 namespace CourseManagement.Domain.Classes;
 
@@ -22,6 +23,7 @@ public sealed class Class : Entity
     
     public Staff CreatedBy { get; init; } = null!;
     public ICollection<CourseClass> CourseClasses { get; init; } = [];
+    public ICollection<StudentCourseClass> EnrolledStudentClasses { get; init; } = [];
 
     public void Update(string title, string? description)
     {

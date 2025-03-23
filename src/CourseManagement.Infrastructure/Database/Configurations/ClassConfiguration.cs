@@ -29,6 +29,10 @@ internal sealed class ClassConfiguration : BaseEntityTypeConfiguration<Class>
             .WithOne(x => x.Class)
             .HasForeignKey(x => x.ClassId);
 
+        builder.HasMany(x => x.EnrolledStudentClasses)
+            .WithOne(x => x.Class)
+            .HasForeignKey(x => x.ClassId);
+
         builder.HasIndex(x => x.Title)
             .IsUnique()
             .HasIsDeletedFilter();

@@ -50,6 +50,14 @@ internal sealed class StaffConfiguration : BaseEntityTypeConfiguration<Staff>
         builder.HasMany(x => x.Students)
             .WithOne(x => x.AddedBy)
             .HasForeignKey(x => x.StaffId);
+
+        builder.HasMany(x => x.EnrolledStudentCourses)
+            .WithOne(x => x.EnrolledBy)
+            .HasForeignKey(x => x.StaffId);
+
+        builder.HasMany(x => x.EnrolledStudentClasses)
+            .WithOne(x => x.EnrolledBy)
+            .HasForeignKey(x => x.StaffId);
         
         builder.HasIndex(x => x.UserId)
             .IsUnique()
