@@ -6,5 +6,6 @@ public sealed record StudentResponse(
     string Email,
     string FirstName,
     string LastName,
-    Guid StaffId
+    Guid StaffId,
+    DateTime CreatedAt
 );

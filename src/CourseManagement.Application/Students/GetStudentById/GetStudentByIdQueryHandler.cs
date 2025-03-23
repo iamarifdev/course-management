@@ -17,7 +17,8 @@ internal sealed class GetStudentByIdQueryHandler(IStudentRepository studentRepos
                 x.User.Email.Value,
                 x.FirstName,
                 x.LastName,
-                x.StaffId
+                x.StaffId,
+                x.CreatedAt
             ))
             .FirstOrDefaultAsync(cancellationToken);
 
