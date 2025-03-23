@@ -1,6 +1,8 @@
 using CourseManagement.Application.Base;
+using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Application.Classes.CreateClass;
 using CourseManagement.Application.Classes.DeleteClass;
+using CourseManagement.Application.Classes.EnrollStudentInClass;
 using CourseManagement.Application.Classes.GetClassById;
 using CourseManagement.Application.Classes.GetClassCourses;
 using CourseManagement.Application.Classes.GetClasses;
@@ -14,7 +16,7 @@ namespace CourseManagement.API.Controllers.Classes;
 
 [ApiController]
 [Route("api/classes")]
-public class ClassesController(ISender sender) : ControllerBase
+public class ClassesController(ISender sender, IUserContext userContext) : ControllerBase
 {
     [HttpGet]
     [Authorize(Roles = Roles.Staff)]
@@ -51,6 +53,19 @@ public class ClassesController(ISender sender) : ControllerBase
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+
+    [HttpPost("{id:guid}/students")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> EnrollStudentInClass(
+        Guid id,
+        EnrollStudentInClassRequest request,
+        CancellationToken cancellationToken)
+    {
+        var query = new EnrollStudentInClassCommand(id, Guid.Parse(request.StudentId), userContext.StaffId);
+
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok();
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetClassById))]

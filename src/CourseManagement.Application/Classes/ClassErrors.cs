@@ -22,5 +22,5 @@ public static class ClassErrors
     
     public static readonly Error StudentAlreadyEnrolled = Error.Conflict(
         "Course.StudentAlreadyEnrolled",
-        "The student is already enrolled in all the classes");
+        "The student is already enrolled in the class");
 }
