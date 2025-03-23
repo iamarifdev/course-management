@@ -4,6 +4,7 @@ using CourseManagement.Application.Courses.DeleteCourse;
 using CourseManagement.Application.Courses.GetCourseById;
 using CourseManagement.Application.Courses.GetCourseClasses;
 using CourseManagement.Application.Courses.GetCourses;
+using CourseManagement.Application.Courses.GetCourseStudents;
 using CourseManagement.Application.Courses.UpdateCourse;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -34,11 +35,19 @@ public class CoursesController(ISender sender) : ControllerBase
     
     [HttpGet("{id:guid}/classes")]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> GetCourseClassesById(
-        Guid id,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCourseClassesById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetCourseClassesQuery(id);
+
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+    
+    [HttpGet("{id:guid}/students")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> GetCourseStudentsById(Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetCourseStudentsQuery(id);
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
