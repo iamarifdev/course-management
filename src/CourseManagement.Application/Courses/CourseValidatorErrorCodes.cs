@@ -2,7 +2,6 @@ namespace CourseManagement.Application.Courses;
 
 public static class CourseValidatorErrorCodes
 {
-    public const string InvalidId = nameof(InvalidId);
     public const string EmptyId = nameof(EmptyId);
     public const string EmptyStudentId = nameof(EmptyStudentId);
     public const string EmptyCourseId = nameof(EmptyCourseId);
