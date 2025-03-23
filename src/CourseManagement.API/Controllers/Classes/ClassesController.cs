@@ -4,6 +4,7 @@ using CourseManagement.Application.Classes.DeleteClass;
 using CourseManagement.Application.Classes.GetClassById;
 using CourseManagement.Application.Classes.GetClassCourses;
 using CourseManagement.Application.Classes.GetClasses;
+using CourseManagement.Application.Classes.GetClassStudents;
 using CourseManagement.Application.Classes.UpdateClass;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -34,17 +35,25 @@ public class ClassesController(ISender sender) : ControllerBase
     
     [HttpGet("{id:guid}/courses")]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> GetClassCoursesById(
-        Guid id,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> GetClassCoursesById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetClassCoursesQuery(id);
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
+    
+    [HttpGet("{id:guid}/students")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> GetClassStudentsById(Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetClassStudentsQuery(id);
 
-    [HttpGet("{id:guid}", Name = "GetClassById")]
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+
+    [HttpGet("{id:guid}", Name = nameof(GetClassById))]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetClassById(Guid id, CancellationToken cancellationToken)
     {
@@ -65,7 +74,7 @@ public class ClassesController(ISender sender) : ControllerBase
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure
             ? result.ToErrorResult()
-            : CreatedAtRoute("GetClassById", new { id = result.Value }, null);
+            : CreatedAtRoute(nameof(GetClassById), new { id = result.Value }, null);
     }
 
     [HttpPut("{id:guid}")]
