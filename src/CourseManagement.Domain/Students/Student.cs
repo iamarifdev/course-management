@@ -23,8 +23,8 @@ public sealed class Student : Entity
     public string LastName { get; private set; }
     public Guid StaffId { get; private set; }
 
-    public User User { get; set; }
-    public Staff AddedBy { get; set; }
+    public User User { get; init; }
+    public Staff AddedBy { get; init; }
     public ICollection<StudentCourseClass> EnrolledClasses { get; init; } = [];
     public ICollection<StudentCourse> EnrolledCourses { get; init; } = [];
 

@@ -4,6 +4,7 @@ using CourseManagement.Application.Students.AddStudent;
 using CourseManagement.Application.Students.DeleteStudent;
 using CourseManagement.Application.Students.GetClassmates;
 using CourseManagement.Application.Students.GetStudentById;
+using CourseManagement.Application.Students.GetStudentClassEnrollment;
 using CourseManagement.Application.Students.GetStudentCourseClasses;
 using CourseManagement.Application.Students.GetStudents;
 using MediatR;
@@ -34,7 +35,7 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
-    
+
     [HttpGet("{id:guid}", Name = nameof(GetStudentById))]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetStudentById(Guid id, CancellationToken cancellationToken)
@@ -44,7 +45,20 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
-    
+
+    [HttpGet("{id:guid}/classes/{classId:guid}/enrollment")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> GetStudentClassEnrollment(
+        Guid id,
+        Guid classId,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetStudentClassEnrollmentQuery(id, classId);
+
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+
     [HttpGet("me/classmates")]
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> GetClassmates(CancellationToken cancellationToken)
@@ -54,7 +68,7 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
-    
+
     [HttpGet("me/course-classes")]
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> GetMyCourseClasses(CancellationToken cancellationToken)
@@ -77,7 +91,6 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
             : CreatedAtRoute(nameof(GetStudentById), new { id = result.Value }, null);
     }
     
-
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> DeleteStudentById(
