@@ -4,6 +4,7 @@ using CourseManagement.Application.Students.AddStudent;
 using CourseManagement.Application.Students.DeleteStudent;
 using CourseManagement.Application.Students.GetClassmates;
 using CourseManagement.Application.Students.GetStudentById;
+using CourseManagement.Application.Students.GetStudentCourseClasses;
 using CourseManagement.Application.Students.GetStudents;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -49,6 +50,16 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     public async Task<IActionResult> GetClassmates(CancellationToken cancellationToken)
     {
         var query = new GetClassmatesQuery(userContext.StudentId);
+
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+    
+    [HttpGet("me/course-classes")]
+    [Authorize(Roles = Roles.Student)]
+    public async Task<IActionResult> GetMyCourseClasses(CancellationToken cancellationToken)
+    {
+        var query = new GetStudentCourseClassesQuery(userContext.StudentId);
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
