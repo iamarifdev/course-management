@@ -1,6 +1,8 @@
 using CourseManagement.Application.Base;
+using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Application.Students.AddStudent;
 using CourseManagement.Application.Students.DeleteStudent;
+using CourseManagement.Application.Students.GetClassmates;
 using CourseManagement.Application.Students.GetStudentById;
 using CourseManagement.Application.Students.GetStudents;
 using MediatR;
@@ -11,7 +13,7 @@ namespace CourseManagement.API.Controllers.Students;
 
 [ApiController]
 [Route("api/students")]
-public class StudentsController(ISender sender) : ControllerBase
+public class StudentsController(ISender sender, IUserContext userContext) : ControllerBase
 {
     [HttpGet]
     [Authorize(Roles = Roles.Staff)]
@@ -37,6 +39,16 @@ public class StudentsController(ISender sender) : ControllerBase
     public async Task<IActionResult> GetStudentById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetStudentByIdQuery(id);
+
+        var result = await sender.Send(query, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+    
+    [HttpGet("my/classmates")]
+    [Authorize]
+    public async Task<IActionResult> GetMyClassmates(CancellationToken cancellationToken)
+    {
+        var query = new GetClassmatesQuery(userContext.StudentId);
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
