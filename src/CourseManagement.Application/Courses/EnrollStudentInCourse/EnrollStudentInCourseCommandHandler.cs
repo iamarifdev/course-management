@@ -52,13 +52,10 @@ internal sealed class EnrollStudentInCourseCommandHandler(
         if (course.ClassIds.Any())
         {
             var existingClassEnrollments = await studentCourseClassRepository.GetQueryable()
-                .Where(x => x.StudentId == request.StudentId &&
-                            x.CourseId == request.CourseId &&
-                            course.ClassIds.Contains(x.ClassId) &&
-                            !x.IsDeleted)
+                .Where(x => x.StudentId == request.StudentId && course.ClassIds.Contains(x.ClassId))
                 .Select(x => x.ClassId)
                 .ToListAsync(cancellationToken);
-        
+
             var newClassEnrollments = course.ClassIds
                 .Except(existingClassEnrollments)
                 .Select(classId => StudentCourseClass.Create(
@@ -68,7 +65,7 @@ internal sealed class EnrollStudentInCourseCommandHandler(
                     request.StaffId
                 ))
                 .ToList();
-        
+
             if (newClassEnrollments.Any())
             {
                 studentCourseClassRepository.AddRange(newClassEnrollments);

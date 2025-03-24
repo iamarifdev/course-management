@@ -44,9 +44,9 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
     
-    [HttpGet("my/classmates")]
-    [Authorize]
-    public async Task<IActionResult> GetMyClassmates(CancellationToken cancellationToken)
+    [HttpGet("me/classmates")]
+    [Authorize(Roles = Roles.Student)]
+    public async Task<IActionResult> GetClassmates(CancellationToken cancellationToken)
     {
         var query = new GetClassmatesQuery(userContext.StudentId);
 
