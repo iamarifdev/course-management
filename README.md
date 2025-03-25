@@ -36,3 +36,6 @@ https://learn.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view
       docker compose -f docker-compose.yml -f docker-compose.override.yml down
     ```
 
+## To see the logs of the containers
+Visit the following link address in your browser
+http://localhost:8082

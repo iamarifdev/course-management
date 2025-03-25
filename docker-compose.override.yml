@@ -22,5 +22,3 @@ services:
       - POSTGRES_PASSWORD=Abcd1234!
     volumes:
       - ./.container/database:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"

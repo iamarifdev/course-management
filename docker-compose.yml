@@ -1,5 +1,9 @@
 ﻿version: "3.9"
 
+networks:
+  course-management-network:
+    driver: bridge
+
 services:
   course-management-api:
     image: ${DOCKER_REGISTRY-}course-management-api
@@ -10,6 +14,8 @@ services:
     depends_on:
       course-management-db:
         condition: service_healthy
+    networks:
+      - course-management-network
   
   course-management-db:
     image: postgres:latest
@@ -19,6 +25,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - course-management-network
 
   course-management-seq:
     image: datalust/seq:latest
@@ -28,3 +36,5 @@ services:
     ports:
       - "5341:5341"
       - "8082:80"
+    networks:
+      - course-management-network
