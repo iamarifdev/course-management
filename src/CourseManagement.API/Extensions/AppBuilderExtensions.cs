@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CourseManagement.API.Extensions;
 
-internal static class BuilderServicesExtension
+internal static class AppBuilderExtensions
 {
     public static void ApplyMigrations(this IApplicationBuilder app)
     {
@@ -27,6 +27,11 @@ internal static class BuilderServicesExtension
         dbContext.Seed(passwordHasher);
         
         logger.LogInformation("Database seeded.");
+    }
+
+    public static void UseCustomExceptionHandler(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
     }
     
     public static void UseRequestContextLogging(this IApplicationBuilder app)

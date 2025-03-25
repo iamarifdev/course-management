@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseManagement.API.Extensions;
 
-public static class ActionResultExtension
+public static class ActionResultExtensions
 {
     public static ObjectResult ToErrorResult(this Result result)
     {
