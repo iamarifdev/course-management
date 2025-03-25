@@ -1,3 +1,4 @@
+using CourseManagement.API.Extensions;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Application.Students.AddStudent;

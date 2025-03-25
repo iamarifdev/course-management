@@ -1,7 +1,7 @@
 using CourseManagement.Application.Base;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CourseManagement.API;
+namespace CourseManagement.API.Extensions;
 
 public static class ActionResultExtension
 {
