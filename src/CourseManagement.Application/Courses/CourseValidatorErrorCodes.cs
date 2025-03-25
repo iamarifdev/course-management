@@ -9,5 +9,7 @@ public static class CourseValidatorErrorCodes
     public const string EmptyName = nameof(EmptyName);
     public const string InvalidName = nameof(InvalidName);
     public const string NameMaxLengthExceeds = nameof(NameMaxLengthExceeds);
+    public const string EmptyDescription = nameof(EmptyDescription);
     public const string DescriptionMaxLengthExceeds = nameof(DescriptionMaxLengthExceeds);
+    public const string EmptyCreatedById = nameof(EmptyCreatedById);
 }

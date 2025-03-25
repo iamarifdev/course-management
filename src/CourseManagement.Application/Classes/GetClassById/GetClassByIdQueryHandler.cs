@@ -11,14 +11,14 @@ internal sealed class GetClassByIdQueryHandler(IClassRepository repository)
         var @class = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (@class is null)
         {
-            return Result.Failure<ClassResponse>(ClassErrors.ClassNotFound);
+            return Result.Failure<ClassResponse>(ClassErrors.NotFound);
         }
         
         return new ClassResponse(
             @class.Id,
             @class.Title,
-            @class.CreatedAt,
             @class.Description,
+            @class.CreatedAt,
             @class.UpdatedAt
         );
     }

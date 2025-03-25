@@ -11,14 +11,14 @@ internal sealed class GetCourseByIdQueryHandler(ICourseRepository repository)
         var course = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (course is null)
         {
-            return Result.Failure<CourseResponse>(CourseErrors.CourseNotFound);
+            return Result.Failure<CourseResponse>(CourseErrors.NotFound);
         }
 
         return new CourseResponse(
             course.Id,
             course.Title,
-            course.CreatedAt,
             course.Description,
+            course.CreatedAt,
             course.UpdatedAt
         );
     }

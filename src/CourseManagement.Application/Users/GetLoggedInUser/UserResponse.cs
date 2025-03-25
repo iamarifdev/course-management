@@ -6,4 +6,5 @@ public sealed record UserResponse(
     string Email,
     string? FirstName,
     string? LastName,
-    string? Department);
+    string? Department
+);

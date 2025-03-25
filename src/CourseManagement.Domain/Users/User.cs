@@ -28,4 +28,7 @@ public sealed class User : Entity
         var user = new User(Guid.NewGuid(), email, role, password);
         return user;
     }
+    
+    public void UpdatePassword(string password) => Password = new Password(password);
+    public void UpdateEmail(string email) => Email = new Email(email);
 }

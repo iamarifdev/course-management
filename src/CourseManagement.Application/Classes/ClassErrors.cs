@@ -12,8 +12,8 @@ public static class ClassErrors
         "Class.NoCourseAssociated",
         "At least one course must be associated with the class");
 
-    public static readonly Error ClassNotFound = Error.NotFound(
-        "Class.ClassNotFound",
+    public static readonly Error NotFound = Error.NotFound(
+        "Class.NotFound",
         "The class with the specified identifier was not found");
     
     public static Error InvalidCoursesAssociated(IEnumerable<Guid> ids) => Error.Failure(

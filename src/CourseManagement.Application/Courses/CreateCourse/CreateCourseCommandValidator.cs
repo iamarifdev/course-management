@@ -12,6 +12,10 @@ internal sealed class CreateCourseCommandValidator : AbstractValidator<CreateCou
             .Matches(Constants.AlphaNumericRegex).WithErrorCode(CourseValidatorErrorCodes.InvalidName)
             .MaximumLength(100).WithErrorCode(CourseValidatorErrorCodes.NameMaxLengthExceeds);
         RuleFor(c => c.Description)
+            .NotEqual(string.Empty).WithErrorCode(CourseValidatorErrorCodes.EmptyDescription)
             .MaximumLength(250).WithErrorCode(CourseValidatorErrorCodes.DescriptionMaxLengthExceeds);
+        RuleFor(c => c.CreatedById)
+            .NotEmpty().WithErrorCode(CourseValidatorErrorCodes.EmptyCreatedById)
+            .NotEqual(Guid.Empty).WithErrorCode(CourseValidatorErrorCodes.EmptyCreatedById);
     }
 }

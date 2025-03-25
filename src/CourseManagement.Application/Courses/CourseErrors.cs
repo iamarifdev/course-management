@@ -8,8 +8,8 @@ public static class CourseErrors
         "Course.AlreadyExists",
         "A course with the same name already exists");
 
-    public static readonly Error CourseNotFound = Error.NotFound(
-        "Course.CourseNotFound",
+    public static readonly Error NotFound = Error.NotFound(
+        "Course.NotFound",
         "The course with the specified identifier was not found");
     
     public static readonly Error StudentAlreadyEnrolled = Error.Conflict(

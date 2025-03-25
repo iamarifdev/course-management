@@ -32,7 +32,7 @@ internal sealed class EnrollStudentInClassCommandHandler(
 
         if (@class is null)
         {
-            return Result.Failure(ClassErrors.ClassNotFound);
+            return Result.Failure(ClassErrors.NotFound);
         }
 
         if (@class.IsStudentEnrolled)
@@ -43,7 +43,7 @@ internal sealed class EnrollStudentInClassCommandHandler(
         var studentExists = await studentRepository.ExistsAsync(s => s.Id == request.StudentId, cancellationToken);
         if (!studentExists)
         {
-            return Result.Failure(StudentErrors.StudentNotFound);
+            return Result.Failure(StudentErrors.NotFound);
         }
         
         var studentCourseClass = StudentCourseClass.Create(

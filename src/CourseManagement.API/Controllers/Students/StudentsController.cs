@@ -1,6 +1,7 @@
 using CourseManagement.API.Extensions;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
+using CourseManagement.Application.Base.Extensions;
 using CourseManagement.Application.Students.AddStudent;
 using CourseManagement.Application.Students.DeleteStudent;
 using CourseManagement.Application.Students.GetClassmates;
@@ -8,6 +9,7 @@ using CourseManagement.Application.Students.GetStudentById;
 using CourseManagement.Application.Students.GetStudentClassEnrollment;
 using CourseManagement.Application.Students.GetStudentCourseClasses;
 using CourseManagement.Application.Students.GetStudents;
+using CourseManagement.Application.Students.UpdateStudent;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +24,8 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetAllStudents(
         [FromQuery] GetAllStudentsRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var query = new GetStudentsQuery
         {
@@ -31,7 +34,7 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
             FilterText = request.FilterText,
             SortBy = request.SortBy,
             SortOrder = request.SortOrder
-        };
+        }.Sanitize();
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
@@ -52,7 +55,8 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     public async Task<IActionResult> GetStudentClassEnrollment(
         Guid id,
         Guid classId,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var query = new GetStudentClassEnrollmentQuery(id, classId);
 
@@ -84,19 +88,43 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> AddStudent(CreateStudentRequest request, CancellationToken cancellationToken)
     {
-        var command = new AddStudentCommand(request.FirstName, request.LastName, request.Email, request.Password);
+        var command = new AddStudentCommand(
+            request.FirstName,
+            request.LastName,
+            request.Email,
+            request.Password,
+            userContext.StaffId
+        ).Sanitize();
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure
             ? result.ToErrorResult()
-            : CreatedAtRoute(nameof(GetStudentById), new { id = result.Value }, null);
+            : CreatedAtRoute(nameof(GetStudentById), new { id = result.Value.Id }, result.Value);
     }
-    
+
+    [HttpPatch("{id:guid}")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<IActionResult> UpdateStudentById(
+        Guid id,
+        UpdateStudentRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new UpdateStudentCommand(
+            id,
+            request.FirstName,
+            request.LastName,
+            request.Email,
+            request.Password
+        ).Sanitize();
+
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
+    }
+
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> DeleteStudentById(
-        Guid id,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteStudentById(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteStudentCommand(id);
 

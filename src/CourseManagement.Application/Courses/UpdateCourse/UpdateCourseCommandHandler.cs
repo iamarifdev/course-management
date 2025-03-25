@@ -12,7 +12,7 @@ internal sealed class UpdateCourseCommandHandler(ICourseRepository courseReposit
         var course = await courseRepository.GetByIdAsync(request.Id, cancellationToken);
         if (course is null)
         {
-            return Result.Failure<CourseResponse>(CourseErrors.CourseNotFound);
+            return Result.Failure<CourseResponse>(CourseErrors.NotFound);
         }
         
         // check whether the course name already exists
@@ -27,14 +27,14 @@ internal sealed class UpdateCourseCommandHandler(ICourseRepository courseReposit
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var result = new CourseResponse(
+        var response = new CourseResponse(
             course.Id,
             course.Title,
-            course.CreatedAt,
             course.Description,
+            course.CreatedAt,
             course.UpdatedAt
         );
 
-        return Result.Success(result);
+        return Result.Success(response);
     }
 }

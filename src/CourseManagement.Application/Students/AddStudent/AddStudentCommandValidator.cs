@@ -18,5 +18,8 @@ internal sealed class AddStudentCommandValidator : AbstractValidator<AddStudentC
         RuleFor(c => c.Password)
             .NotEmpty().WithErrorCode(StudentValidatorErrorCodes.EmptyPassword)
             .MaximumLength(12).WithErrorCode(StudentValidatorErrorCodes.PasswordMaxLengthExceeds);
+        RuleFor(c => c.AddedById)
+            .NotEmpty().WithErrorCode(StudentValidatorErrorCodes.EmptyAddedById)
+            .NotEqual(Guid.Empty).WithErrorCode(StudentValidatorErrorCodes.EmptyAddedById);
     }
 }

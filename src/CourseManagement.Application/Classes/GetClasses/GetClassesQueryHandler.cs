@@ -25,7 +25,7 @@ internal sealed class GetClassesQueryHandler(IClassRepository repository)
         var items = await query
             .Skip(request.SkipItems)
             .Take(request.PageSize)
-            .Select(c => new ClassResponse(c.Id, c.Title, c.CreatedAt, c.Description, c.UpdatedAt))
+            .Select(c => new ClassResponse(c.Id, c.Title, c.Description, c.CreatedAt, c.UpdatedAt))
             .ToListAsync(cancellationToken);
 
         return Result.Success(items.ToPaginatedResult(totalCount, request));

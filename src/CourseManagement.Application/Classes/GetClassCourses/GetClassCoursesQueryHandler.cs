@@ -8,8 +8,10 @@ namespace CourseManagement.Application.Classes.GetClassCourses;
 internal sealed class GetClassCoursesQueryHandler(IClassRepository repository)
     : IQueryHandler<GetClassCoursesQuery, ClassCoursesResponse>
 {
-    public async Task<Result<ClassCoursesResponse>> Handle(GetClassCoursesQuery request,
-        CancellationToken cancellationToken)
+    public async Task<Result<ClassCoursesResponse>> Handle(
+        GetClassCoursesQuery request,
+        CancellationToken cancellationToken
+    )
     {
         var @class = await repository.GetQueryable()
             .Where(x => x.Id == request.Id)
@@ -20,8 +22,8 @@ internal sealed class GetClassCoursesQueryHandler(IClassRepository repository)
                 s.CourseClasses.Select(c => new CourseResponse(
                     c.Course.Id,
                     c.Course.Title,
-                    c.Course.CreatedAt,
                     c.Course.Description,
+                    c.Course.CreatedAt,
                     c.Course.UpdatedAt
                 )).ToList(),
                 s.CreatedAt,
@@ -30,7 +32,7 @@ internal sealed class GetClassCoursesQueryHandler(IClassRepository repository)
             .FirstOrDefaultAsync(cancellationToken);
 
         return @class is null
-            ? Result.Failure<ClassCoursesResponse>(ClassErrors.ClassNotFound)
+            ? Result.Failure<ClassCoursesResponse>(ClassErrors.NotFound)
             : Result.Success(@class);
     }
 }

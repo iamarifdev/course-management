@@ -10,14 +10,14 @@ namespace CourseManagement.Application.Classes.CreateClass;
 internal sealed class CreateClassCommandHandler(
     ICourseRepository courseRepository,
     IClassRepository classRepository,
-    IUserContext userContext,
-    IUnitOfWork unitOfWork) : ICommandHandler<CreateClassCommand, Guid>
+    IUnitOfWork unitOfWork
+) : ICommandHandler<CreateClassCommand, ClassResponse>
 {
-    public async Task<Result<Guid>> Handle(CreateClassCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ClassResponse>> Handle(CreateClassCommand request, CancellationToken cancellationToken)
     {
         if (!request.CourseIds.Any())
         {
-            return Result.Failure<Guid>(ClassErrors.NoCourseAssociated);
+            return Result.Failure<ClassResponse>(ClassErrors.NoCourseAssociated);
         }
 
         var courses = await courseRepository.GetQueryable()
@@ -26,20 +26,28 @@ internal sealed class CreateClassCommandHandler(
         if (courses.Count != request.CourseIds.Count)
         {
             var invalidIds = request.CourseIds.Except(courses.Select(c => c.Id));
-            return Result.Failure<Guid>(ClassErrors.InvalidCoursesAssociated(invalidIds));
+            return Result.Failure<ClassResponse>(ClassErrors.InvalidCoursesAssociated(invalidIds));
         }
 
         var isExists = await classRepository.ExistsAsync(x => x.Title == request.Name, cancellationToken);
         if (isExists)
         {
-            return Result.Failure<Guid>(ClassErrors.ClassAlreadyExists);
+            return Result.Failure<ClassResponse>(ClassErrors.ClassAlreadyExists);
         }
 
-        var @class = Class.Create(request.Name, userContext.StaffId, request.CourseIds, request.Description);
+        var @class = Class.Create(request.Name, request.CreatedById, request.CourseIds, request.Description);
 
         classRepository.Add(@class);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(@class.Id);
+        var response = new ClassResponse(
+            @class.Id,
+            @class.Title,
+            @class.Description,
+            @class.CreatedAt,
+            @class.UpdatedAt
+        );
+
+        return Result.Success(response);
     }
 }

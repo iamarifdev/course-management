@@ -12,7 +12,7 @@ internal sealed class UpdateClassCommandHandler(IClassRepository repository, IUn
         var @class = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (@class is null)
         {
-            return Result.Failure<ClassResponse>(ClassErrors.ClassNotFound);
+            return Result.Failure<ClassResponse>(ClassErrors.NotFound);
         }
 
         // check whether the @class name already exists
@@ -30,8 +30,8 @@ internal sealed class UpdateClassCommandHandler(IClassRepository repository, IUn
         var result = new ClassResponse(
             @class.Id,
             @class.Title,
-            @class.CreatedAt,
             @class.Description,
+            @class.CreatedAt,
             @class.UpdatedAt
         );
 

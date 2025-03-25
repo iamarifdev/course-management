@@ -6,5 +6,6 @@ public sealed record AddStudentCommand(
     string FirstName,
     string LastName,
     string Email,
-    string Password
-) : ICommand<Guid>;
+    string Password,
+    Guid AddedById
+) : ICommand<StudentResponse>;

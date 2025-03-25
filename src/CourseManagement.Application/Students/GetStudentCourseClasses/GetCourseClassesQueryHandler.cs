@@ -7,8 +7,10 @@ namespace CourseManagement.Application.Students.GetStudentCourseClasses;
 internal sealed class GetStudentClassesQueryHandler(IStudentCourseClassRepository repository)
     : IQueryHandler<GetStudentCourseClassesQuery, List<StudentCourseClassResponse>>
 {
-    public async Task<Result<List<StudentCourseClassResponse>>> Handle(GetStudentCourseClassesQuery request,
-        CancellationToken cancellationToken)
+    public async Task<Result<List<StudentCourseClassResponse>>> Handle(
+        GetStudentCourseClassesQuery request,
+        CancellationToken cancellationToken
+    )
     {
         var courseClasses = await repository.GetQueryable()
             .Where(x => x.StudentId == request.StudentId)

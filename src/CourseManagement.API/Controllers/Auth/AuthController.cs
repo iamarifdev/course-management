@@ -1,3 +1,4 @@
+using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Application.Users.GetLoggedInUser;
 using CourseManagement.Application.Users.LoginUser;
 using MediatR;
@@ -28,9 +29,9 @@ public class AuthController(ISender sender) : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetLoggedInUser(IUserContext userContext, CancellationToken cancellationToken)
     {
-        var query = new GetLoggedInUserQuery();
+        var query = new GetLoggedInUserQuery(userContext.UserId);
 
         var result = await sender.Send(query, cancellationToken);
 

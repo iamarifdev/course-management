@@ -32,4 +32,17 @@ public sealed class Student : Entity
     {
         return new Student(Guid.NewGuid(), userId, firstName, lastName, staffId);
     }
+
+    public void Update(string? firstName, string? lastName)
+    {
+        if (!string.IsNullOrWhiteSpace(firstName))
+        {
+            FirstName = firstName;
+        }
+
+        if (!string.IsNullOrWhiteSpace(lastName))
+        {
+            LastName = lastName;
+        }
+    }
 }

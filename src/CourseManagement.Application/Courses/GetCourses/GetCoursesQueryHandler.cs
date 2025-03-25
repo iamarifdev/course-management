@@ -9,7 +9,8 @@ internal sealed class GetCoursesQueryHandler(ICourseRepository repository)
 {
     public async Task<Result<PaginatedResult<CourseResponse>>> Handle(
         GetCoursesQuery request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var query = repository.GetQueryable();
 
@@ -25,7 +26,7 @@ internal sealed class GetCoursesQueryHandler(ICourseRepository repository)
         var items = await query
             .Skip(request.SkipItems)
             .Take(request.PageSize)
-            .Select(c => new CourseResponse(c.Id, c.Title, c.CreatedAt, c.Description, c.UpdatedAt))
+            .Select(c => new CourseResponse(c.Id, c.Title, c.Description, c.CreatedAt, c.UpdatedAt))
             .ToListAsync(cancellationToken);
 
         return Result.Success(items.ToPaginatedResult(totalCount, request));

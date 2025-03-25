@@ -12,7 +12,7 @@ internal sealed class DeleteClassCommandHandler(IClassRepository repository, IUn
         var course = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (course is null)
         {
-            return Result.Failure(ClassErrors.ClassNotFound);
+            return Result.Failure(ClassErrors.NotFound);
         }
 
         course.SetDeleted();

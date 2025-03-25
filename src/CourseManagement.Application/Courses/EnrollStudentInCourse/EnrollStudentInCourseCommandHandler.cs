@@ -14,7 +14,8 @@ internal sealed class EnrollStudentInCourseCommandHandler(
     ICourseRepository courseRepository,
     IStudentRepository studentRepository,
     IStudentCourseRepository studentCourseRepository,
-    IStudentCourseClassRepository studentCourseClassRepository) : ICommandHandler<EnrollStudentInCourseCommand>
+    IStudentCourseClassRepository studentCourseClassRepository
+) : ICommandHandler<EnrollStudentInCourseCommand>
 {
     public async Task<Result> Handle(EnrollStudentInCourseCommand request, CancellationToken cancellationToken)
     {
@@ -32,7 +33,7 @@ internal sealed class EnrollStudentInCourseCommandHandler(
 
         if (course is null)
         {
-            return Result.Failure(CourseErrors.CourseNotFound);
+            return Result.Failure(CourseErrors.NotFound);
         }
 
         if (course.IsStudentEnrolled)
@@ -43,7 +44,7 @@ internal sealed class EnrollStudentInCourseCommandHandler(
         var studentExists = await studentRepository.ExistsAsync(s => s.Id == request.StudentId, cancellationToken);
         if (!studentExists)
         {
-            return Result.Failure(StudentErrors.StudentNotFound);
+            return Result.Failure(StudentErrors.NotFound);
         }
 
         var studentCourse = StudentCourse.Create(request.StudentId, request.CourseId, request.StaffId);

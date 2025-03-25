@@ -1,6 +1,7 @@
 using CourseManagement.API.Extensions;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
+using CourseManagement.Application.Base.Extensions;
 using CourseManagement.Application.Classes.CreateClass;
 using CourseManagement.Application.Classes.DeleteClass;
 using CourseManagement.Application.Classes.EnrollStudentInClass;
@@ -23,7 +24,8 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetAllClasses(
         [FromQuery] GetAllClassesRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var query = new GetClassesQuery
         {
@@ -35,7 +37,7 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
-    
+
     [HttpGet("{id:guid}/courses")]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetClassCoursesById(Guid id, CancellationToken cancellationToken)
@@ -45,7 +47,7 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
-    
+
     [HttpGet("{id:guid}/students")]
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetClassStudentsById(Guid id, CancellationToken cancellationToken)
@@ -61,7 +63,8 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     public async Task<IActionResult> EnrollStudentInClass(
         Guid id,
         EnrollStudentInClassRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var query = new EnrollStudentInClassCommand(id, Guid.Parse(request.StudentId), userContext.StaffId);
 
@@ -81,16 +84,19 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
 
     [HttpPost]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> CreateClass(
-        CreateClassRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateClass(CreateClassRequest request, CancellationToken cancellationToken)
     {
-        var command = new CreateClassCommand(request.Title, request.CourseIds, request.Description);
+        var command = new CreateClassCommand(
+            request.Title,
+            request.CourseIds,
+            request.Description,
+            userContext.StaffId
+        ).Sanitize();
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure
             ? result.ToErrorResult()
-            : CreatedAtRoute(nameof(GetClassById), new { id = result.Value }, null);
+            : CreatedAtRoute(nameof(GetClassById), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpPut("{id:guid}")]
@@ -98,9 +104,10 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     public async Task<IActionResult> UpdateClassById(
         Guid id,
         UpdateClassRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
-        var command = new UpdateClassCommand(id, request.Title, request.Description);
+        var command = new UpdateClassCommand(id, request.Title, request.Description).Sanitize();
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
@@ -108,9 +115,7 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
 
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> DeleteClassById(
-        Guid id,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteClassById(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteClassCommand(id);
 

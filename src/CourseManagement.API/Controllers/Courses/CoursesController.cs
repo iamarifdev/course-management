@@ -1,6 +1,7 @@
 using CourseManagement.API.Extensions;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
+using CourseManagement.Application.Base.Extensions;
 using CourseManagement.Application.Courses.CreateCourse;
 using CourseManagement.Application.Courses.DeleteCourse;
 using CourseManagement.Application.Courses.EnrollStudentInCourse;
@@ -23,7 +24,8 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetAllCourses(
         [FromQuery] GetAllCoursesRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var query = new GetCoursesQuery
         {
@@ -61,7 +63,8 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     public async Task<IActionResult> EnrollStudentInCourse(
         Guid id,
         EnrollStudentInCourseRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var query = new EnrollStudentInCourseCommand(id, Guid.Parse(request.StudentId), userContext.StaffId);
 
@@ -81,16 +84,14 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
 
     [HttpPost]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> CreateCourse(
-        CreateCourseRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateCourse(CreateCourseRequest request, CancellationToken cancellationToken)
     {
-        var command = new CreateCourseCommand(request.Title, request.Description);
+        var command = new CreateCourseCommand(request.Title, request.Description, userContext.StaffId).Sanitize();
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure
             ? result.ToErrorResult()
-            : CreatedAtRoute(nameof(GetCourseById), new { id = result.Value }, null);
+            : CreatedAtRoute(nameof(GetCourseById), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpPut("{id:guid}")]
@@ -98,9 +99,10 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     public async Task<IActionResult> UpdateCourseById(
         Guid id,
         UpdateCourseRequest request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
-        var command = new UpdateCourseCommand(id, request.Title, request.Description);
+        var command = new UpdateCourseCommand(id, request.Title, request.Description).Sanitize();
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
@@ -108,9 +110,7 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
 
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = Roles.Staff)]
-    public async Task<IActionResult> DeleteCourseById(
-        Guid id,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteCourseById(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteCourseCommand(id);
 

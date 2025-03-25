@@ -8,8 +8,10 @@ namespace CourseManagement.Application.Courses.GetCourseStudents;
 internal sealed class GetCourseStudentsQueryHandler(ICourseRepository repository)
     : IQueryHandler<GetCourseStudentsQuery, CourseStudentsResponse>
 {
-    public async Task<Result<CourseStudentsResponse>> Handle(GetCourseStudentsQuery request,
-        CancellationToken cancellationToken)
+    public async Task<Result<CourseStudentsResponse>> Handle(
+        GetCourseStudentsQuery request,
+        CancellationToken cancellationToken
+    )
     {
         var courseStudents = await repository.GetQueryable()
             .Where(x => x.Id == request.Id)
@@ -32,7 +34,7 @@ internal sealed class GetCourseStudentsQueryHandler(ICourseRepository repository
             .FirstOrDefaultAsync(cancellationToken);
 
         return courseStudents is null
-            ? Result.Failure<CourseStudentsResponse>(CourseErrors.CourseNotFound)
+            ? Result.Failure<CourseStudentsResponse>(CourseErrors.NotFound)
             : Result.Success(courseStudents);
     }
 }

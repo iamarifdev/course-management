@@ -10,21 +10,20 @@ using CourseManagement.Domain.Users.ValueObjects;
 namespace CourseManagement.Application.Students.AddStudent;
 
 internal sealed class AddStudentCommandHandler(
-    IUserContext userContext,
     IStudentRepository studentRepository,
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
     IUnitOfWork unitOfWork
-) : ICommandHandler<AddStudentCommand, Guid>
+) : ICommandHandler<AddStudentCommand, StudentResponse>
 {
-    public async Task<Result<Guid>> Handle(AddStudentCommand request, CancellationToken cancellationToken)
+    public async Task<Result<StudentResponse>> Handle(AddStudentCommand request, CancellationToken cancellationToken)
     {
         var email = request.Email.ToLowerCase();
         
         var isExists = await userRepository.ExistsAsync(x => x.Email == new Email(email), cancellationToken);
         if (isExists)
         {
-            return Result.Failure<Guid>(UserErrors.UserExists);
+            return Result.Failure<StudentResponse>(UserErrors.UserExists);
         }
 
         var hashedPassword = passwordHasher.Hash(request.Password).Value;
@@ -39,12 +38,22 @@ internal sealed class AddStudentCommandHandler(
             user.Id,
             request.FirstName,
             request.LastName,
-            userContext.StaffId
+            request.AddedById
         );
         studentRepository.Add(student);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        var response = new StudentResponse(
+            student.Id,
+            user.Id,
+            user.Email.Value,
+            student.FirstName,
+            student.LastName,
+            request.AddedById,
+            student.CreatedAt
+        );
 
-        return Result.Success(student.Id);
+        return Result.Success(response);
     }
 }

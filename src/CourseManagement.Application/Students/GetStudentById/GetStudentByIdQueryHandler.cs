@@ -23,7 +23,7 @@ internal sealed class GetStudentByIdQueryHandler(IStudentRepository studentRepos
             .FirstOrDefaultAsync(cancellationToken);
 
         return student == null
-            ? Result.Failure<StudentResponse>(StudentErrors.StudentNotFound)
+            ? Result.Failure<StudentResponse>(StudentErrors.NotFound)
             : Result.Success(student);
     }
 }

@@ -32,7 +32,7 @@ internal sealed class GetClassStudentsQueryHandler(IClassRepository repository)
             .FirstOrDefaultAsync(cancellationToken);
 
         return classStudents is null
-            ? Result.Failure<ClassStudentsResponse>(ClassErrors.ClassNotFound)
+            ? Result.Failure<ClassStudentsResponse>(ClassErrors.NotFound)
             : Result.Success(classStudents);
     }
 }
