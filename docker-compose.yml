@@ -1,0 +1,30 @@
+﻿version: "3.9"
+
+services:
+  course-management-api:
+    image: ${DOCKER_REGISTRY-}course-management-api
+    container_name: CourseManagement.API
+    build:
+      context: .
+      dockerfile: src/CourseManagement.API/Dockerfile
+    depends_on:
+      course-management-db:
+        condition: service_healthy
+  
+  course-management-db:
+    image: postgres:latest
+    container_name: CourseManagement.DB
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  course-management-seq:
+    image: datalust/seq:latest
+    container_name: CourseManagement.Seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:5341"
+      - "8082:80"

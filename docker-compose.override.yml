@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  course-management-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8088
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ConnectionStrings__Database=Host=course-management-db;Port=5432;Database=course_management;User Id=postgres;Password=Abcd1234!;
+    ports:
+      - "8080:8080"
+      - "8088:8088"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+  
+  course-management-db:
+    environment:
+      - POSTGRES_DB=course_management
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Abcd1234!
+    volumes:
+      - ./.container/database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
