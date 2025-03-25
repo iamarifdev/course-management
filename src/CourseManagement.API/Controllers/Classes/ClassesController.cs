@@ -16,12 +16,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseManagement.API.Controllers.Classes;
 
+[Authorize(Roles = Roles.Staff)]
 [ApiController]
-[Route("api/classes")]
+[Route("[controller]")]
 public class ClassesController(ISender sender, IUserContext userContext) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetAllClasses(
         [FromQuery] GetAllClassesRequest request,
         CancellationToken cancellationToken
@@ -39,7 +39,6 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpGet("{id:guid}/courses")]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetClassCoursesById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetClassCoursesQuery(id);
@@ -49,7 +48,6 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpGet("{id:guid}/students")]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetClassStudentsById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetClassStudentsQuery(id);
@@ -59,7 +57,6 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpPost("{id:guid}/students")]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> EnrollStudentInClass(
         Guid id,
         EnrollStudentInClassRequest request,
@@ -73,7 +70,6 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetClassById))]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetClassById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetClassByIdQuery(id);
@@ -83,7 +79,6 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpPost]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> CreateClass(CreateClassRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateClassCommand(
@@ -100,7 +95,6 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> UpdateClassById(
         Guid id,
         UpdateClassRequest request,
@@ -114,7 +108,6 @@ public class ClassesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpDelete("{id:guid}")]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> DeleteClassById(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteClassCommand(id);

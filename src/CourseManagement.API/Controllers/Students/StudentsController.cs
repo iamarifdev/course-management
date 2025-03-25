@@ -16,12 +16,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseManagement.API.Controllers.Students;
 
+[Authorize(Roles = Roles.Staff)]
 [ApiController]
-[Route("api/students")]
+[Route("[controller]")]
 public class StudentsController(ISender sender, IUserContext userContext) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetAllStudents(
         [FromQuery] GetAllStudentsRequest request,
         CancellationToken cancellationToken
@@ -41,7 +41,6 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetStudentById))]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetStudentById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetStudentByIdQuery(id);
@@ -51,7 +50,6 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     }
 
     [HttpGet("{id:guid}/classes/{classId:guid}/enrollment")]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> GetStudentClassEnrollment(
         Guid id,
         Guid classId,
@@ -64,8 +62,8 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
 
-    [HttpGet("me/classmates")]
     [Authorize(Roles = Roles.Student)]
+    [HttpGet("me/classmates")]
     public async Task<IActionResult> GetClassmates(CancellationToken cancellationToken)
     {
         var query = new GetClassmatesQuery(userContext.StudentId);
@@ -74,8 +72,8 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
     }
 
-    [HttpGet("me/course-classes")]
     [Authorize(Roles = Roles.Student)]
+    [HttpGet("me/course-classes")]
     public async Task<IActionResult> GetMyCourseClasses(CancellationToken cancellationToken)
     {
         var query = new GetStudentCourseClassesQuery(userContext.StudentId);
@@ -85,7 +83,6 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     }
 
     [HttpPost]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> AddStudent(CreateStudentRequest request, CancellationToken cancellationToken)
     {
         var command = new AddStudentCommand(
@@ -103,7 +100,6 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     }
 
     [HttpPatch("{id:guid}")]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> UpdateStudentById(
         Guid id,
         UpdateStudentRequest request,
@@ -123,7 +119,6 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
     }
 
     [HttpDelete("{id:guid}")]
-    [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> DeleteStudentById(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteStudentCommand(id);

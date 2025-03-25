@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CourseManagement.API.Controllers.Auth;
 
 [ApiController]
-[Route("api/auth")]
+[Route("[controller]")]
 public class AuthController(ISender sender) : ControllerBase
 {
     [AllowAnonymous]
