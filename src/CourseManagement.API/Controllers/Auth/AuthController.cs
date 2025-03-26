@@ -13,6 +13,8 @@ public class AuthController(ISender sender) : ControllerBase
 {
     [AllowAnonymous]
     [HttpPost("login")]
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(LogInUserRequest request, CancellationToken cancellationToken)
     {
         var command = new LoginUserCommand(request.Email, request.Password);
@@ -29,6 +31,8 @@ public class AuthController(ISender sender) : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetLoggedInUser(IUserContext userContext, CancellationToken cancellationToken)
     {
         var query = new GetLoggedInUserQuery(userContext.UserId);

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CourseManagement.Application.Students.GetStudentCourseClasses;
 
-internal sealed class GetStudentClassesQueryHandler(IStudentCourseClassRepository repository)
+internal sealed class GetStudentCourseClassesQueryHandler(IStudentCourseClassRepository repository)
     : IQueryHandler<GetStudentCourseClassesQuery, List<StudentCourseClassResponse>>
 {
     public async Task<Result<List<StudentCourseClassResponse>>> Handle(

@@ -16,9 +16,9 @@ internal sealed class GetStudentClassEnrollmentQueryHandler(IStudentCourseClassR
             .Where(x => x.StudentId == request.StudentId && x.ClassId == request.ClassId)
             .Select(x => new StudentClassEnrollmentResponse(
                 x.Id,
-                new ClassResponse(x.ClassId, x.Class.Title),
-                new StudentResponse(x.StudentId, x.Student.FirstName, x.Student.LastName),
-                new StaffResponse(x.StaffId, x.EnrolledBy.FirstName, x.EnrolledBy.LastName),
+                new ClassInfoResponse(x.ClassId, x.Class.Title),
+                new StudentInfoResponse(x.StudentId, x.Student.FirstName, x.Student.LastName),
+                new StaffInfoResponse(x.StaffId, x.EnrolledBy.FirstName, x.EnrolledBy.LastName),
                 x.CreatedAt
             ))
             .FirstOrDefaultAsync(cancellationToken);

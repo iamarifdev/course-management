@@ -49,6 +49,7 @@ public static class DependencyInjection
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IStudentCourseRepository, StudentCourseRepository>();
         services.AddScoped<IStudentCourseClassRepository, StudentCourseClassRepository>();
+        
         #endregion
         
         services.AddScoped<IUserService, UserService>();

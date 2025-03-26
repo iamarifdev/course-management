@@ -1,3 +1,4 @@
+using System.Reflection;
 using CourseManagement.API.Middlewares;
 using CourseManagement.API.Swagger;
 using CourseManagement.API.Swagger.Examples;
@@ -17,6 +18,7 @@ internal static class AppBuilderExtensions
         builder.Services.AddOpenApi();
         builder.Services.AddSwaggerGen(c =>
         {
+            c.EnableAnnotations();
             c.DocumentFilter<PathPrefixFilter>(Constants.ApiRoutePrefix);
             c.SwaggerDoc("v1", new OpenApiInfo { Title = Constants.ApiSwaggerDocTitle, Version = "v1" });
             c.ExampleFilters();
@@ -108,9 +110,9 @@ internal static class AppBuilderExtensions
                         throw new InvalidOperationException("Jwt config is not found");
 
         builder.Services.AddCors(options => options.AddPolicy(
-                Constants.CorsPolicyName,
-                p => p.WithOrigins(jwtConfig.Audience).AllowAnyHeader().AllowAnyMethod()
-            ));
+            Constants.CorsPolicyName,
+            p => p.WithOrigins(jwtConfig.Audience).AllowAnyHeader().AllowAnyMethod()
+        ));
     }
 
     public static void ConfigureRoute(this WebApplicationBuilder builder)

@@ -18,7 +18,7 @@ internal sealed class LoginUserCommandHandler(
         var user = await userService.GetUserInfoAsync(x => x.Email == new Email(email), cancellationToken);
         if (user is null)
         {
-            return Result.Failure<LoginResponse>(UserErrors.UserNotFoundByEmail);
+            return Result.Failure<LoginResponse>(UserErrors.InvalidCredentials);
         }
 
         var result = passwordHasher.Verify(request.Password, user.PasswordHash);

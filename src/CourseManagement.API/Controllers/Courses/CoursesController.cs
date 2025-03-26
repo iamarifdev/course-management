@@ -2,6 +2,7 @@ using CourseManagement.API.Extensions;
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Application.Base.Extensions;
+using CourseManagement.Application.Courses;
 using CourseManagement.Application.Courses.CreateCourse;
 using CourseManagement.Application.Courses.DeleteCourse;
 using CourseManagement.Application.Courses.EnrollStudentInCourse;
@@ -13,6 +14,7 @@ using CourseManagement.Application.Courses.UpdateCourse;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CourseManagement.API.Controllers.Courses;
 
@@ -22,6 +24,11 @@ namespace CourseManagement.API.Controllers.Courses;
 public class CoursesController(ISender sender, IUserContext userContext) : ControllerBase
 {
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Get all Courses by pagination and filtering",
+        Description = "Returns a list of paginated Courses"
+    )]
+    [ProducesResponseType(typeof(PaginatedResult<CourseResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllCourses(
         [FromQuery] GetAllCoursesRequest request,
         CancellationToken cancellationToken
@@ -39,6 +46,12 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpGet("{id:guid}/classes")]
+    [SwaggerOperation(
+        Summary = "Get all Classes in a Course",
+        Description = "Returns a list of associated Classes with the Course"
+    )]
+    [ProducesResponseType(typeof(CourseClassesResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCourseClassesById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetCourseClassesQuery(id);
@@ -48,6 +61,12 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpGet("{id:guid}/students")]
+    [SwaggerOperation(
+        Summary = "Get all enrolled Students in a Course",
+        Description = "Returns a Course detail with list of enrolled students in the Course"
+    )]
+    [ProducesResponseType(typeof(CourseStudentsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCourseStudentsById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetCourseStudentsQuery(id);
@@ -57,6 +76,10 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpPost("{id:guid}/students")]
+    [SwaggerOperation(Summary = "Enroll a Student in a Course and it's all associated Classes")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> EnrollStudentInCourse(
         Guid id,
         EnrollStudentInCourseRequest request,
@@ -70,6 +93,12 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetCourseById))]
+    [SwaggerOperation(
+        Summary = "Get a Course by ID",
+        Description = "Returns a Course with the specified ID"
+    )]
+    [ProducesResponseType(typeof(CourseResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetCourseByIdQuery(id);
@@ -79,6 +108,13 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Create a new Course",
+        Description = "Returns the newly created Course"
+    )]
+    [ProducesResponseType(typeof(CourseResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateCourse(CreateCourseRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateCourseCommand(request.Title, request.Description, userContext.StaffId).Sanitize();
@@ -90,6 +126,13 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpPut("{id:guid}")]
+    [SwaggerOperation(
+        Summary = "Update a Course by ID",
+        Description = "Returns the updated Course"
+    )]
+    [ProducesResponseType(typeof(CourseResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> UpdateCourseById(
         Guid id,
         UpdateCourseRequest request,
@@ -103,6 +146,9 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
     }
 
     [HttpDelete("{id:guid}")]
+    [SwaggerOperation(Summary = "Delete a Course by ID")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCourseById(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteCourseCommand(id);
