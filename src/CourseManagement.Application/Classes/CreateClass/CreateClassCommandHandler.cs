@@ -1,5 +1,4 @@
 using CourseManagement.Application.Base;
-using CourseManagement.Application.Base.Authentication;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Classes;
 using CourseManagement.Domain.Courses;

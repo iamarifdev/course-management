@@ -1,4 +1,3 @@
-using System.Reflection;
 using CourseManagement.API.Middlewares;
 using CourseManagement.API.Swagger;
 using CourseManagement.API.Swagger.Examples;
