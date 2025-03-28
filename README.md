@@ -36,6 +36,17 @@ https://learn.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view
       docker compose -f docker-compose.yml -f docker-compose.override.yml down
     ```
 
-## To see the logs of the containers
+## To see the structure logs and traces of the services
 Visit the following link address in your browser
 http://localhost:8082
+
+## To run the tests
+- ### Change the directory to root directory
+  ```bash
+  dotnet test
+  ```
+
+**Important:** For functional tests **Docker** must be **installed and running**.
+It uses TestContainers to run the tests which requires Docker to be running.
+Ref: https://testcontainers.com/
+
