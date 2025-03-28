@@ -95,6 +95,11 @@ internal static class AppBuilderExtensions
 
         logger.LogInformation("Database migrations applied.");
 
+        if (app.IsTestEnvironment())
+        {
+            return;
+        }
+
         logger.LogInformation("Seeding database...");
 
         var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
@@ -127,5 +132,11 @@ internal static class AppBuilderExtensions
     public static void UseRequestContextLogging(this IApplicationBuilder app)
     {
         app.UseMiddleware<RequestContextLoggingMiddleware>();
+    }
+
+    public static bool IsTestEnvironment(this IApplicationBuilder _)
+    {
+        var envValue = Environment.GetEnvironmentVariable("IS_TEST");
+        return !string.IsNullOrWhiteSpace(envValue);
     }
 }
