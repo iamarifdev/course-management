@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.Applicatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.API.FunctionalTests", "test\CourseManagement.API.FunctionalTests\CourseManagement.API.FunctionalTests.csproj", "{4FB30E84-D6E6-428D-92A9-D6AAF898C3B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.API.IntegrationTests", "test\CourseManagement.API.IntegrationTests\CourseManagement.API.IntegrationTests.csproj", "{AE32D191-F3F7-4F0B-9EF6-D3822F00FEE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,5 +43,9 @@ Global
 		{4FB30E84-D6E6-428D-92A9-D6AAF898C3B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FB30E84-D6E6-428D-92A9-D6AAF898C3B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FB30E84-D6E6-428D-92A9-D6AAF898C3B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE32D191-F3F7-4F0B-9EF6-D3822F00FEE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE32D191-F3F7-4F0B-9EF6-D3822F00FEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE32D191-F3F7-4F0B-9EF6-D3822F00FEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE32D191-F3F7-4F0B-9EF6-D3822F00FEE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

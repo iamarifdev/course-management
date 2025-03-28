@@ -4,7 +4,7 @@ using CourseManagement.Domain.Courses;
 
 namespace CourseManagement.Application.Courses.CreateCourse;
 
-internal sealed class CreateCourseCommandHandler(IUnitOfWork unitOfWork, ICourseRepository courseRepository)
+internal sealed class CreateCourseCommandHandler(ICourseRepository courseRepository, IUnitOfWork unitOfWork)
     : ICommandHandler<CreateCourseCommand, CourseResponse>
 {
     public async Task<Result<CourseResponse>> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
