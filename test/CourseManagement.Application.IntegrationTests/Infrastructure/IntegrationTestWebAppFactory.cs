@@ -1,5 +1,5 @@
-using CourseManagement.API.IntegrationTests.Users;
 using CourseManagement.Application.Base;
+using CourseManagement.Application.IntegrationTests.Users;
 using CourseManagement.Domain.Base;
 using CourseManagement.Domain.Staffs;
 using CourseManagement.Domain.Students;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Testcontainers.PostgreSql;
 
-namespace CourseManagement.API.IntegrationTests.Infrastructure;
+namespace CourseManagement.Application.IntegrationTests.Infrastructure;
 
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {

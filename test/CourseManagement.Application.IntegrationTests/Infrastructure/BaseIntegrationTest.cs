@@ -2,7 +2,7 @@ using CourseManagement.Infrastructure.Database;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CourseManagement.API.IntegrationTests.Infrastructure;
+namespace CourseManagement.Application.IntegrationTests.Infrastructure;
 
 public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
 {

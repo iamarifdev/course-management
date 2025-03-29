@@ -1,4 +1,4 @@
-namespace CourseManagement.API.IntegrationTests.Users;
+namespace CourseManagement.Application.IntegrationTests.Users;
 
 internal static class UserData
 {

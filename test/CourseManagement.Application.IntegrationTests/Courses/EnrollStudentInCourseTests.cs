@@ -1,11 +1,11 @@
-using CourseManagement.API.IntegrationTests.Infrastructure;
 using CourseManagement.Application.Courses;
 using CourseManagement.Application.Courses.CreateCourse;
 using CourseManagement.Application.Courses.EnrollStudentInCourse;
+using CourseManagement.Application.IntegrationTests.Infrastructure;
 using CourseManagement.Application.Students;
 using FluentAssertions;
 
-namespace CourseManagement.API.IntegrationTests.Courses;
+namespace CourseManagement.Application.IntegrationTests.Courses;
 
 public class EnrollStudentInCourseTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
