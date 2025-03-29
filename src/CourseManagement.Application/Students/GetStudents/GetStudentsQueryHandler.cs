@@ -41,7 +41,7 @@ internal sealed class GetStudentsQueryHandler(IStudentRepository repository)
 
         var items = await query
             .Skip(request.SkipItems)
-            .Take(request.PageSize)
+            .Take(request.ItemsCount)
             .Select(x => new StudentResponse(
                 x.Id,
                 x.UserId,

@@ -4,12 +4,11 @@ namespace CourseManagement.Application.Base.Extensions;
 
 public static class CommandQueryExtensions
 {
-    public static T Sanitize<T>(this T command)
-        where T : class
+    public static T Sanitize<T>(this T command) where T : class
     {
         var type = command.GetType();
         var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(p => p.PropertyType == typeof(string) && p.CanRead)
+            .Where(p => p.CanRead)
             .ToArray();
 
         if (!properties.Any())
@@ -32,10 +31,18 @@ public static class CommandQueryExtensions
         for (var i = 0; i < parameters.Length; i++)
         {
             var param = parameters[i];
-            var property = properties.FirstOrDefault(p => p.Name.Equals(param.Name, StringComparison.OrdinalIgnoreCase));
-            parameterValues[i] = property != null
-                ? ((string?)property.GetValue(command))?.Trim()
-                : type.GetProperty(param.Name!, BindingFlags.Public | BindingFlags.Instance)?.GetValue(command);
+            var property =
+                properties.FirstOrDefault(p => p.Name.Equals(param.Name, StringComparison.OrdinalIgnoreCase));
+
+            if (property != null)
+            {
+                var value = property.GetValue(command);
+                parameterValues[i] = value is string str ? str.Trim() : value;
+            }
+            else
+            {
+                parameterValues[i] = null;
+            }
         }
 
         return (T)constructor.Invoke(parameterValues);

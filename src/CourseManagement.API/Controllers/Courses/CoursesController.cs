@@ -34,12 +34,7 @@ public class CoursesController(ISender sender, IUserContext userContext) : Contr
         CancellationToken cancellationToken
     )
     {
-        var query = new GetCoursesQuery
-        {
-            PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            FilterText = request.FilterText,
-        };
+        var query = new GetCoursesQuery(request.FilterText, request.PageNumber, request.PageSize).Sanitize();
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
