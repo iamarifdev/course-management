@@ -12,4 +12,9 @@ internal sealed class UserRepository(ApplicationDbContext dbContext) : Repositor
     {
         return _dbContext.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
+
+    public Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Users.AnyAsync(x => x.Email == email, cancellationToken);
+    }
 }

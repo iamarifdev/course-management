@@ -19,7 +19,7 @@ internal sealed class AddStudentCommandHandler(
     {
         var email = request.Email.ToLowerCase();
         
-        var isExists = await userRepository.ExistsAsync(x => x.Email == new Email(email), cancellationToken);
+        var isExists = await userRepository.ExistsByEmailAsync(new Email(email), cancellationToken);
         if (isExists)
         {
             return Result.Failure<StudentResponse>(UserErrors.UserExists);

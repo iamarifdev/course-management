@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.API.Functi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.API.IntegrationTests", "test\CourseManagement.API.IntegrationTests\CourseManagement.API.IntegrationTests.csproj", "{AE32D191-F3F7-4F0B-9EF6-D3822F00FEE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.API.UnitTests", "test\CourseManagement.API.UnitTests\CourseManagement.API.UnitTests.csproj", "{62350ACB-3939-4DC5-A332-9D739EAD8EA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagement.Application.UnitTests", "test\CourseManagement.Application.UnitTests\CourseManagement.Application.UnitTests.csproj", "{62350ACB-3939-4DC5-A332-9D739EAD8EA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

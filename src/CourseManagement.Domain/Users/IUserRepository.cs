@@ -6,4 +6,5 @@ namespace CourseManagement.Domain.Users;
 public interface IUserRepository : IRepository<User>
 {
     Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default);
+    Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken = default);
 }
