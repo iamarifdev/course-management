@@ -20,6 +20,8 @@ public sealed class Staff : Entity
         StaffId = staffId;
         Department = department;
     }
+    
+    private Staff() {}
 
     public Guid UserId { get; private set; }
     public string? FirstName { get; private set; }
