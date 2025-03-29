@@ -1,10 +1,13 @@
+using CourseManagement.API.Binders;
 using CourseManagement.Application.Base;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CourseManagement.API.Controllers.Students;
 
-public record GetAllStudentsRequest : PaginatedQuery, IFilterableQuery, ISortableQuery
-{
-    public string? FilterText { get; set; }
-    public string? SortBy { get; set; }
-    public SortOrder? SortOrder { get; set; }
-}
+public record GetAllStudentsRequest(
+    string? FilterText,
+    string? SortBy,
+    SortOrder? SortOrder,
+    int? PageNumber = 1,
+    int? PageSize = 20
+) : PaginatedQuery(PageNumber, PageSize), IFilterableQuery, ISortableQuery;

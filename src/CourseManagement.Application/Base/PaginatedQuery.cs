@@ -8,19 +8,26 @@ public enum SortOrder
 
 public interface IFilterableQuery
 {
-    string? FilterText { get; set; }
+    string? FilterText { get; init; }
 }
 
 public interface ISortableQuery
 {
-    string? SortBy { get; set; }
-    SortOrder? SortOrder { get; set; }
+    string? SortBy { get; init; }
+    SortOrder? SortOrder { get; init; }
 }
 
-public abstract record PaginatedQuery
+public abstract record PaginatedQuery(int? PageNumber, int? PageSize)
 {
-    public int PageNumber { get; set; } = 1;
-    public int PageSize { get; set; } = 20;
-
-    public int SkipItems => (PageNumber - 1) * PageSize;
+    public int SkipItems
+    {
+        get
+        {
+            var pageNumber = PageNumber ?? 1;
+            var pageSize = PageSize ?? 20;
+            return (pageNumber - 1) * pageSize;
+        }
+    }
+    public int CurrentPage => PageNumber ?? 1;
+    public int ItemsCount => PageSize ?? 20;
 }

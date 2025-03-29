@@ -34,14 +34,13 @@ public class StudentsController(ISender sender, IUserContext userContext) : Cont
         CancellationToken cancellationToken
     )
     {
-        var query = new GetStudentsQuery
-        {
-            PageNumber = request.PageNumber,
-            PageSize = request.PageSize,
-            FilterText = request.FilterText,
-            SortBy = request.SortBy,
-            SortOrder = request.SortOrder
-        }.Sanitize();
+        var query = new GetStudentsQuery(
+            request.FilterText,
+            request.SortBy,
+            request.SortOrder,
+            request.PageNumber,
+            request.PageSize
+        ).Sanitize();
 
         var result = await sender.Send(query, cancellationToken);
         return result.IsFailure ? result.ToErrorResult() : Ok(result.Value);
