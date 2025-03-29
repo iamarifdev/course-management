@@ -17,20 +17,14 @@ dotnet ef database update --startup-project ../CourseManagement.API --context Ap
 
 ## To run the project using Docker compose
 
-#### Important: Follow this official reference to set up https secret and certificate in different environments (Linux, Windows, Mac)
-https://learn.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-9.0
-
-This project is using a self-signed certificate in Mac and linux containers. Specifically this section is followed:
-https://learn.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-9.0
-
-### To run the solution using Docker compose with overrides
+### To start the services with overrides
 - Change the directory to the root of the project
 - Run the following command
     ```bash
     docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
     ```
 
-### To stop the containers
+### To stop the services
 - Run the following command
     ```bash
       docker compose -f docker-compose.yml -f docker-compose.override.yml down
@@ -49,4 +43,8 @@ http://localhost:8082
 **Important:** For functional tests **Docker** must be **installed and running**.
 It uses TestContainers to run the tests which requires Docker to be running.
 Ref: https://testcontainers.com/
+
+## To check the Swagger API documentation
+Visit the following link address in your browser
+http://localhost:8080/swagger
 

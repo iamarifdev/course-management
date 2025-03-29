@@ -1,0 +1,1075 @@
+{
+	"info": {
+		"_postman_id": "45e2dd7d-e18f-4d58-a691-f031f0f02ec1",
+		"name": "Course Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37386088"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login as Staff",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code == 200) {",
+									"    const response = pm.response.json();",
+									"",
+									"    const accessToken = response.accessToken;",
+									"    const refreshToken = response.refreshToken;",
+									"",
+									"    pm.environment.set(\"accessToken\", accessToken);",
+									"    pm.environment.set(\"refreshToken\", refreshToken);",
+									"",
+									"    console.log(\"Access Token: \" + accessToken);",
+									"    console.log(\"Refresh Token: \" + refreshToken);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"protocolVersion": "http2"
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"staff@university.com\",\n    \"password\": \"Staff12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code == 200) {",
+									"    const response = pm.response.json();",
+									"",
+									"    const accessToken = response.accessToken;",
+									"    const refreshToken = response.refreshToken;",
+									"",
+									"    pm.environment.set(\"accessToken\", accessToken);",
+									"    pm.environment.set(\"refreshToken\", refreshToken);",
+									"",
+									"    console.log(\"Access Token: \" + accessToken);",
+									"    console.log(\"Refresh Token: \" + refreshToken);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"protocolVersion": "http2"
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"iam.arifdev@gmail.com\",\n    \"password\": \"@Arif12345@\",\n    \"_email\": \"general25@hotmail.com\",\n    \"_password\": \"Student12345\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LoggedIn User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "Get all Courses",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses?filterText=Math",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "pageNumber",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "filterText",
+									"value": "Math"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course associated Classes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/:id/classes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								":id",
+								"classes"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "99301c22-2b9c-4536-bf0c-b4c864551a78"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enroll a Student in Course",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentId\": \"c6d2efe0-f941-4163-a728-1b12d9eb186e\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/courses/:id/students",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								":id",
+								"students"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3e0ae615-f96e-48df-aebe-c92fa5494f5a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course enrolled Students",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/:id/students",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								":id",
+								"students"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3e0ae615-f96e-48df-aebe-c92fa5494f5a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3e0ae615-f96e-48df-aebe-c92fa5494f5a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Course",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"A test study\",\n    \"description\": \"A test study will never be enrolled by anyone, ever.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/courses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Course by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Math 104\",\n    \"description\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/courses/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "66cf7ed8-3b2d-4541-963b-611ef9bcb639"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Course by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/courses/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"courses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "feedfa09-61a5-48f1-a536-76319606f9b3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Classes",
+			"item": [
+				{
+					"name": "Get all Classes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/classes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"classes"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "pageNumber",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "filterText",
+									"value": "104",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Class associated Courses",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/classes/:id/courses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"classes",
+								":id",
+								"courses"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "27d23474-69d1-41a9-86e9-782eaedc53ac"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enroll a Student in Class",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentId\": \"70a9d879-16ba-474e-af94-ff0ceb1ba5ac\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/classes/:id/students",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"classes",
+								":id",
+								"students"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b5e28800-7c3c-4ad5-a3f2-198c8e9e78be"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Class enrolled Students",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/classes/:id/students",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"classes",
+								":id",
+								"students"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b5e28800-7c3c-4ad5-a3f2-198c8e9e78be"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Class by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/classes/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"classes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "27d23474-69d1-41a9-86e9-782eaedc53ac"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Class",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Math 102\",\n    \"description\": \"Math 102 class for everyone\",\n    \"courseIds\": [\n        \"66cf7ed8-3b2d-4541-963b-611ef9bcb639\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/classes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"classes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Class by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Math 104\",\n    \"description\": \"New description\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/classes/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"classes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "61e4d1de-e63f-4fa3-bc83-9712ae2d199f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Class by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/classes/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"classes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "61e4d1de-e63f-4fa3-bc83-9712ae2d199f"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "Get all Students",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "pageNumber",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "filterText",
+									"value": "Arif",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "firstname",
+									"description": "Values are: firstname, lastname, email\nThese values will be compared against .ToLower() value",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "asc",
+									"description": "Values: asc/ascending/0, desc/descending/1, default: asc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a Student",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Shariful\",\n    \"lastName\": \"Islam\",\n    \"email\": \"sharif@test.com\",\n    \"password\": \"@Sharif12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/students",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Student by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Ariful \",\n    \"lastName\": \"Islam\",\n    \"email\": \"iam.arifdev@gmail.com \",\n    \"password\": \"@Arif12345@ \"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/students/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a7432fb7-f123-4ece-a895-ed0ddc3989d2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a7432fb7-f123-4ece-a895-ed0ddc3989d2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my Classmates",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/me/classmates",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"me",
+								"classmates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my Courses and Classes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/me/course-classes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								"me",
+								"course-classes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student Class enrollment detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/:id/classes/:classId/enrollment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								":id",
+								"classes",
+								":classId",
+								"enrollment"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "44cac3fd-1697-4f60-af68-f38d05723c96"
+								},
+								{
+									"key": "classId",
+									"value": "b5e28800-7c3c-4ad5-a3f2-198c8e9e78be"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Student by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/students/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"students",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "dc22d186-a914-4bb8-8c20-8f1fd162d28e"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
