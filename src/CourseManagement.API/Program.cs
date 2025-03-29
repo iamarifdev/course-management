@@ -30,8 +30,6 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-app.UseHttpsRedirection();
-
 app.UsePathBase(Constants.ApiRoutePrefix);
 app.UseRouting();
 app.UseCors(Constants.CorsPolicyName);
