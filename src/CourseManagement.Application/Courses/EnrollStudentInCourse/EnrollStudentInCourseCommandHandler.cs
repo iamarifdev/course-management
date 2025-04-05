@@ -19,7 +19,7 @@ internal sealed class EnrollStudentInCourseCommandHandler(
 {
     public async Task<Result> Handle(EnrollStudentInCourseCommand request, CancellationToken cancellationToken)
     {
-        var course = await courseRepository.GetQueryable()
+        var result = await courseRepository.GetQueryable()
             .Where(x => x.Id == request.CourseId)
             .Select(x => new
             {
@@ -27,38 +27,38 @@ internal sealed class EnrollStudentInCourseCommandHandler(
                 IsStudentEnrolled = x.EnrolledStudentCourses.Any(
                     e => e.StudentId == request.StudentId
                 ),
-                ClassIds = x.CourseClasses.Select(cc => cc.ClassId).ToList()
+                // Only get class ids that are not enrolled by the student
+                ClassIds = x.CourseClasses
+                    .Where(cc => !x.EnrolledStudentClasses.Any(
+                        scc => scc.StudentId == request.StudentId && scc.ClassId == cc.ClassId
+                    ))
+                    .Select(cc => cc.ClassId)
+                    .ToList(),
+                StudentExists = studentRepository.GetQueryable().Any(s => s.Id == request.StudentId)
             })
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (course is null)
+        if (result is null)
         {
             return Result.Failure(CourseErrors.NotFound);
         }
 
-        if (course.IsStudentEnrolled)
-        {
-            return Result.Failure(CourseErrors.StudentAlreadyEnrolled);
-        }
-
-        var studentExists = await studentRepository.ExistsAsync(s => s.Id == request.StudentId, cancellationToken);
-        if (!studentExists)
+        if (!result.StudentExists)
         {
             return Result.Failure(StudentErrors.NotFound);
+        }
+
+        if (result.IsStudentEnrolled)
+        {
+            return Result.Failure(CourseErrors.StudentAlreadyEnrolled);
         }
 
         var studentCourse = StudentCourse.Create(request.StudentId, request.CourseId, request.StaffId);
         studentCourseRepository.Add(studentCourse);
 
-        if (course.ClassIds.Any())
+        if (result.ClassIds.Any())
         {
-            var existingClassEnrollments = await studentCourseClassRepository.GetQueryable()
-                .Where(x => x.StudentId == request.StudentId && course.ClassIds.Contains(x.ClassId))
-                .Select(x => x.ClassId)
-                .ToListAsync(cancellationToken);
-
-            var newClassEnrollments = course.ClassIds
-                .Except(existingClassEnrollments)
+            var newClassEnrollments = result.ClassIds
                 .Select(classId => StudentCourseClass.Create(
                     request.StudentId,
                     request.CourseId,
@@ -67,10 +67,7 @@ internal sealed class EnrollStudentInCourseCommandHandler(
                 ))
                 .ToList();
 
-            if (newClassEnrollments.Any())
-            {
-                studentCourseClassRepository.AddRange(newClassEnrollments);
-            }
+            studentCourseClassRepository.AddRange(newClassEnrollments);
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
