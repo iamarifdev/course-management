@@ -24,8 +24,8 @@ internal sealed class GetCoursesQueryHandler(ICourseRepository repository)
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
-            .Skip(request.SkipItems)
-            .Take(request.ItemsCount)
+            .Skip(request.GetSkipItems())
+            .Take(request.GetItemsCount())
             .Select(c => new CourseResponse(c.Id, c.Title, c.Description, c.CreatedAt, c.UpdatedAt))
             .ToListAsync(cancellationToken);
 

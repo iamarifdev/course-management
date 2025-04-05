@@ -30,6 +30,19 @@ public class EnrollStudentInCourseTests(IntegrationTestWebAppFactory factory) : 
         // Assert
         result.IsSuccess.Should().BeTrue();
     }
+    
+    [Fact]
+    public async Task EnrollStudentInCourse_ShouldFail_WhenCoursePayloadIsInvalid()
+    {
+        // Arrange
+        var courseCommand = new CreateCourseCommand("", "Description", _factory.StaffId);
+        
+        // Act
+        var result = await Sender.Send(courseCommand);
+        
+        // Assert
+        result.IsFailure.Should().BeTrue();
+    }
 
     [Fact]
     public async Task EnrollStudentInCourse_ShouldReturnFailure_WhenCourseNotFound()

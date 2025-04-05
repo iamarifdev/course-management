@@ -1,7 +1,5 @@
 using CourseManagement.Application.Base;
 using CourseManagement.Application.Base.Authentication;
-using CourseManagement.Application.Base.Extensions;
-using CourseManagement.Domain.Users.ValueObjects;
 
 namespace CourseManagement.Application.Users.LoginUser;
 
@@ -13,9 +11,7 @@ internal sealed class LoginUserCommandHandler(
 {
     public async Task<Result<LoginResponse>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var email = request.Email.ToLowerCase();
-
-        var user = await userService.GetUserInfoAsync(x => x.Email == new Email(email), cancellationToken);
+        var user = await userService.GetUserInfoAsync(x => x.Email == request.Email, cancellationToken);
         if (user is null)
         {
             return Result.Failure<LoginResponse>(UserErrors.InvalidCredentials);

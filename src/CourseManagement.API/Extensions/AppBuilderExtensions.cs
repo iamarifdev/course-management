@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using CourseManagement.API.Middlewares;
 using CourseManagement.API.Swagger;
 using CourseManagement.API.Swagger.Examples;
@@ -81,15 +82,15 @@ internal static class AppBuilderExtensions
         });
     }
 
-    public static void ApplyMigrations(this IApplicationBuilder app)
+    public static void ApplyMigrations(this WebApplication app)
     {
-        var logger = app.ApplicationServices
+        var logger = app.Services
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger("Database");
 
         logger.LogInformation("Applying database migrations...");
 
-        using var scope = app.ApplicationServices.CreateScope();
+        using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         dbContext.Database.Migrate();
 
@@ -124,17 +125,23 @@ internal static class AppBuilderExtensions
         builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
     }
 
-    public static void UseCustomExceptionHandler(this IApplicationBuilder app)
+    public static void AddControllers(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddControllers()
+            .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+    }
+
+    public static void UseCustomExceptionHandler(this WebApplication app)
     {
         app.UseMiddleware<ExceptionHandlingMiddleware>();
     }
 
-    public static void UseRequestContextLogging(this IApplicationBuilder app)
+    public static void UseRequestContextLogging(this WebApplication app)
     {
         app.UseMiddleware<RequestContextLoggingMiddleware>();
     }
 
-    public static bool IsTestEnvironment(this IApplicationBuilder _)
+    public static bool IsTestEnvironment(this WebApplication _)
     {
         var envValue = Environment.GetEnvironmentVariable("IS_TEST");
         return !string.IsNullOrWhiteSpace(envValue);

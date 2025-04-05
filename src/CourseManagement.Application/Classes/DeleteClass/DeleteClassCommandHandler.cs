@@ -15,8 +15,7 @@ internal sealed class DeleteClassCommandHandler(IClassRepository repository, IUn
             return Result.Failure(ClassErrors.NotFound);
         }
 
-        course.SetDeleted();
-        repository.Update(course);
+        repository.Delete(course);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();

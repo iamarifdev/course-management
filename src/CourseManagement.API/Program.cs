@@ -14,7 +14,7 @@ builder.AddCors();
 
 builder.ConfigureRoute();
 
-builder.Services.AddControllers();
+builder.AddControllers();
 
 builder.AddSwaggerExplorer();
 

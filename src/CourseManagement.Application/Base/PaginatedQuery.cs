@@ -1,5 +1,8 @@
+using System.Text.Json.Serialization;
+
 namespace CourseManagement.Application.Base;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SortOrder
 {
     Asc,
@@ -19,15 +22,13 @@ public interface ISortableQuery
 
 public abstract record PaginatedQuery(int? PageNumber, int? PageSize)
 {
-    public int SkipItems
+    public int GetSkipItems()
     {
-        get
-        {
-            var pageNumber = PageNumber ?? 1;
-            var pageSize = PageSize ?? 20;
-            return (pageNumber - 1) * pageSize;
-        }
+        var pageNumber = PageNumber ?? 1;
+        var pageSize = PageSize ?? 20;
+        return (pageNumber - 1) * pageSize;
     }
-    public int CurrentPage => PageNumber ?? 1;
-    public int ItemsCount => PageSize ?? 20;
+
+    public int GetCurrentPage() => PageNumber ?? 1;
+    public int GetItemsCount() => PageSize ?? 20;
 }

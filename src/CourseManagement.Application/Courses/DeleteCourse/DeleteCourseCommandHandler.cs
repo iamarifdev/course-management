@@ -15,8 +15,7 @@ internal sealed class DeleteCourseCommandHandler(ICourseRepository courseReposit
             return Result.Failure(CourseErrors.NotFound);
         }
 
-        course.SetDeleted();
-        courseRepository.Update(course);
+        courseRepository.Delete(course);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success();

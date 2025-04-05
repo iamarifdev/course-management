@@ -22,8 +22,14 @@ internal abstract class Repository<TEntity>(ApplicationDbContext dbContext) : IR
         return await dbContext.Set<TEntity>().AnyAsync(predicate, cancellationToken);
     }
 
-    public virtual void Add(TEntity entity) => dbContext.Add(entity);
+    public void Add(TEntity entity) => dbContext.Add(entity);
     public void AddRange(IEnumerable<TEntity> entities) => dbContext.AddRange(entities);
 
-    public virtual void Update(TEntity entity) => dbContext.Update(entity);
+    public void Update(TEntity entity) => dbContext.Update(entity);
+    
+    public void Delete(TEntity entity)
+    {
+        entity.SetDeleted();
+        dbContext.Update(entity);
+    }
 }

@@ -20,8 +20,8 @@ public class PaginatedResult<T> where T : class
         {
             Items = items,
             TotalCount = totalCount,
-            PageNumber = request.CurrentPage,
-            PageSize = request.ItemsCount
+            PageNumber = request.GetCurrentPage(),
+            PageSize = request.GetItemsCount()
         };
     }
 }

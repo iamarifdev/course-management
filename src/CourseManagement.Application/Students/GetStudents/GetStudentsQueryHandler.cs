@@ -21,7 +21,7 @@ internal sealed class GetStudentsQueryHandler(IStudentRepository repository)
             query = query.Where(x =>
                 x.FirstName.Contains(request.FilterText) ||
                 x.LastName.Contains(request.FilterText) ||
-                x.User.Email == new Email(request.FilterText.ToLowerCase())
+                ((string)x.User.Email).Contains(request.FilterText)
             );
         }
 
@@ -40,8 +40,8 @@ internal sealed class GetStudentsQueryHandler(IStudentRepository repository)
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
-            .Skip(request.SkipItems)
-            .Take(request.ItemsCount)
+            .Skip(request.GetSkipItems())
+            .Take(request.GetItemsCount())
             .Select(x => new StudentResponse(
                 x.Id,
                 x.UserId,
