@@ -9,7 +9,7 @@ internal sealed class CreateCourseCommandHandler(ICourseRepository courseReposit
 {
     public async Task<Result<CourseResponse>> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
     {
-        var course = Course.Create(request.Name, request.CreatedById, request.Description);
+        var course = Course.Create(request.Name, request.Description, request.CreatedById);
 
         var existingCourse = await courseRepository.GetByNameAsync(request.Name, cancellationToken);
         if (existingCourse is not null)

@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using CourseManagement.API.FunctionalTests.Infrastructure;
 using FluentAssertions;
 
-namespace CourseManagement.API.FunctionalTests.Users;
+namespace CourseManagement.API.FunctionalTests.Auth;
 
 public class LoginUserTests(FunctionalTestWebAppFactory factory) : BaseFunctionalTest(factory)
 {

@@ -6,7 +6,7 @@ using CourseManagement.Application.Users.GetLoggedInUser;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace CourseManagement.API.FunctionalTests.Users;
+namespace CourseManagement.API.FunctionalTests.Auth;
 
 public class GetLoggedInUserTests(FunctionalTestWebAppFactory factory) : BaseFunctionalTest(factory)
 {
