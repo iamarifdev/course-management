@@ -117,6 +117,7 @@ internal static class AppBuilderExtensions
         builder.Services.AddCors(options => options.AddPolicy(
             Constants.CorsPolicyName,
             p => p.WithOrigins(jwtConfig.Audience).AllowAnyHeader().AllowAnyMethod()
+                .SetPreflightMaxAge(TimeSpan.FromMinutes(10))
         ));
     }
 
