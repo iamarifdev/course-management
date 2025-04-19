@@ -1,0 +1,106 @@
+@page "/courses"
+@using CourseManagement.Web.Models
+@using CourseManagement.Web.Services
+@inject ICourseApiService Api
+@inject NavigationManager NavigationManager
+
+<h3>Courses</h3>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Filter by title..." @bind="_filterText" @bind:event="oninput" @onkeyup="HandleFilterInput" />
+            <button class="btn btn-primary" @onclick="ApplyFilter">Filter</button>
+        </div>
+    </div>
+</div>
+
+@if (_pagedCourses == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in _pagedCourses.Items)
+            {
+                <tr>
+                    <td>@course.Title</td>
+                    <td>@course.Description</td>
+                    <td>@course.CreatedAt.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(_pagedCourses.PageNumber <= 1 ? "disabled" : "")">
+                <button class="page-link" @onclick="() => ChangePage(_pagedCourses.PageNumber - 1)">Previous</button>
+            </li>
+            @for (int i = 1; i <= _pagedCourses.TotalPages; i++)
+            {
+                var pageNum = i;
+                <li class="page-item @(pageNum == _pagedCourses.PageNumber ? "active" : "")">
+                    <button class="page-link" @onclick="() => ChangePage(pageNum)">@pageNum</button>
+                </li>
+            }
+            <li class="page-item @(_pagedCourses.PageNumber >= _pagedCourses.TotalPages ? "disabled" : "")">
+                <button class="page-link" @onclick="() => ChangePage(_pagedCourses.PageNumber + 1)">Next</button>
+            </li>
+        </ul>
+    </nav>
+
+     <p class="text-center">Showing page @_pagedCourses.PageNumber of @_pagedCourses.TotalPages (@_pagedCourses.TotalCount total courses)</p>
+}
+
+@code {
+    private PaginatedResult<CourseResponse>? _pagedCourses;
+    private string? _filterText;
+    private int _currentPage = 1;
+    private const int PageSize = 10; // Default page size
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCourses();
+    }
+
+    private async Task LoadCourses()
+    {
+        _pagedCourses = await Api.GetCoursesAsync(_filterText, _currentPage, PageSize);
+        StateHasChanged(); // Notify Blazor that the state has changed
+    }
+
+    private async Task ApplyFilter()
+    {
+        _currentPage = 1; // Reset to first page when filter changes
+        await LoadCourses();
+    }
+
+    // Optional: Trigger filter on Enter key press in the input field
+    private async Task HandleFilterInput(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await ApplyFilter();
+        }
+    }
+
+    private async Task ChangePage(int pageNumber)
+    {
+        if (pageNumber < 1 || pageNumber > _pagedCourses?.TotalPages)
+        {
+            return; // Invalid page number
+        }
+        _currentPage = pageNumber;
+        await LoadCourses();
+    }
+}

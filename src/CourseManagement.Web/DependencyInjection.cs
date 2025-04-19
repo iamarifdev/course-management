@@ -9,6 +9,7 @@ public static class DependencyInjection
     {
         AddApiService<IAuthApiService, AuthApiService>(builder);
         AddApiService<IDashboardApiService, DashboardApiService>(builder);
+        AddApiService<ICourseApiService, CourseApiService>(builder);
     }
 
     private static void AddApiService<TInterface, TImplementation>(WebAssemblyHostBuilder builder)
