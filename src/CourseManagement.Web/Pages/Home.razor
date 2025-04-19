@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using CourseManagement.Web.Models
-@inject HttpClient Http
+@using CourseManagement.Web.Services
+@inject IApiService Api
 
 <PageTitle>Course Management Dashboard</PageTitle>
 
@@ -105,7 +106,7 @@
             _errorMessage = null;
             
             // Replace with your actual API endpoint
-            _dashboardData = await Http.GetFromJsonAsync<DashboardSummary>("api/dashboard/counts");
+            _dashboardData = await Api.GetDashboardSummary();
         }
         catch (Exception ex)
         {

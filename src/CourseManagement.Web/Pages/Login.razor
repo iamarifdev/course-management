@@ -1,9 +1,9 @@
 @page "/login"
 @layout EmptyLayout
-@using Blazored.LocalStorage
-@inject HttpClient Http
+@using CourseManagement.Web.Models
+@using CourseManagement.Web.Services
+@inject IApiService Api
 @inject NavigationManager Navigation
-@inject ILocalStorageService LocalStorage
 
 <PageTitle>Course Management | Login</PageTitle>
 
@@ -36,21 +36,11 @@
 
   private async Task HandleLogin()
   {
-    var response = await Http.PostAsJsonAsync("auth/login", _loginModel);
+    var response = await Api.Login(new LoginRequest(_loginModel.Email, _loginModel.Password));
 
-    if (response.IsSuccessStatusCode)
+    if (response is not null)
     {
-      var tokens = await response.Content.ReadFromJsonAsync<TokenResponse>();
-      if (tokens != null)
-      {
-        await LocalStorage.SetItemAsync("accessToken", tokens.AccessToken);
-        await LocalStorage.SetItemAsync("refreshToken", tokens.RefreshToken);
-        Navigation.NavigateTo("/", true); // Redirect to home or dashboard
-      }
-    }
-    else
-    {
-      // Handle login failure
+      Navigation.NavigateTo("/", true);
     }
   }
 
@@ -58,12 +48,6 @@
   {
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
-  }
-
-  private sealed class TokenResponse
-  {
-    public string AccessToken { get; set; } = string.Empty;
-    public string RefreshToken { get; set; } = string.Empty;
   }
 }
 

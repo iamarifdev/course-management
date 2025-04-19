@@ -18,14 +18,18 @@
     </article>
   </main>
 
-@code {
-  private async Task HandleLogout()
-  {
-    // Remove tokens from local storage
-    await LocalStorage.RemoveItemAsync("accessToken");
-    await LocalStorage.RemoveItemAsync("refreshToken");
-    
-    // Redirect to login page
-    Navigation.NavigateTo("/login", true);
+  @code {
+    private const string TokenKey = "access_token";
+    private const string RefreshTokenKey = "refresh_token";
+
+    private async Task HandleLogout()
+    {
+      // Remove tokens from local storage
+      await LocalStorage.RemoveItemAsync(TokenKey);
+      await LocalStorage.RemoveItemAsync(RefreshTokenKey);
+
+      // Redirect to login page
+      Navigation.NavigateTo("/login", true);
+    }
   }
-}</div>
+</div>

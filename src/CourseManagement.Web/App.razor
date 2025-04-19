@@ -17,9 +17,10 @@
 </Router>
 
 @code {
+  private const string TokenKey = "access_token";
   private async Task HandleNavigation(NavigationContext args)
   {
-    var accessToken = await LocalStorage.GetItemAsync<string>("accessToken");
+    var accessToken = await LocalStorage.GetItemAsync<string>(TokenKey);
 
     if (string.IsNullOrEmpty(accessToken) && !args.Path.Contains("login", StringComparison.OrdinalIgnoreCase))
     {
