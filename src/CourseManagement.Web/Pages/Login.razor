@@ -1,0 +1,109 @@
+@page "/login"
+@layout EmptyLayout
+@using Blazored.LocalStorage
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject ILocalStorageService LocalStorage
+
+<PageTitle>Course Management | Login</PageTitle>
+
+<div class="login-page">
+  <div class="login-container">
+    <h3 class="text-center mb-4">Course Management</h3>
+    <h5 class="text-center mb-4">Login to your account</h5>
+
+    <EditForm Model="_loginModel" OnValidSubmit="HandleLogin" class="w-100">
+      <DataAnnotationsValidator />
+      <ValidationSummary />
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="_loginModel.Email" class="form-control" placeholder="Enter your email" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="_loginModel.Password" type="password" class="form-control" placeholder="Enter your password" />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
+    </EditForm>
+  </div>
+</div>
+
+@code {
+  private readonly LoginModel _loginModel = new();
+
+  private async Task HandleLogin()
+  {
+    var response = await Http.PostAsJsonAsync("auth/login", _loginModel);
+
+    if (response.IsSuccessStatusCode)
+    {
+      var tokens = await response.Content.ReadFromJsonAsync<TokenResponse>();
+      if (tokens != null)
+      {
+        await LocalStorage.SetItemAsync("accessToken", tokens.AccessToken);
+        await LocalStorage.SetItemAsync("refreshToken", tokens.RefreshToken);
+        Navigation.NavigateTo("/", true); // Redirect to home or dashboard
+      }
+    }
+    else
+    {
+      // Handle login failure
+    }
+  }
+
+  private sealed class LoginModel
+  {
+    public string Email { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+  }
+
+  private sealed class TokenResponse
+  {
+    public string AccessToken { get; set; } = string.Empty;
+    public string RefreshToken { get; set; } = string.Empty;
+  }
+}
+
+<style>
+  .login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    padding: 1rem;
+  }
+
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+    width: 100%;
+  }
+
+  .btn-block {
+    width: 100%;
+    padding: 0.6rem;
+    font-weight: 500;
+  }
+
+  @@media (max-width: 576px) {
+    .login-container {
+      padding: 1.5rem;
+      max-width: 90%;
+    }
+  }
+</style>

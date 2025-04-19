@@ -8,7 +8,7 @@ namespace CourseManagement.Domain.Courses;
 
 public sealed class Course : Entity
 {
-    private Course(Guid id, string title, Guid staffId, string? description) : base(id)
+    private Course(Guid id, string title, string? description, Guid staffId) : base(id)
     {
         Title = title;
         Description = description;
@@ -32,8 +32,8 @@ public sealed class Course : Entity
         Description = description;
     }
 
-    public static Course Create(string title, Guid staffId, string? description)
+    public static Course Create(string title, string? description, Guid staffId)
     {
-        return new Course(Guid.NewGuid(), title, staffId, description);
+        return new Course(Guid.NewGuid(), title, description, staffId);
     }
 }

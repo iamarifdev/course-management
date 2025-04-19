@@ -1,7 +1,10 @@
-using CourseManagement.API.FunctionalTests.Users;
+using CourseManagement.API.FunctionalTests.Auth;
+using CourseManagement.API.FunctionalTests.Courses;
 using CourseManagement.Application.Base;
 using CourseManagement.Domain.Base;
+using CourseManagement.Domain.Courses;
 using CourseManagement.Domain.Staffs;
+using CourseManagement.Domain.Students;
 using CourseManagement.Domain.Users;
 using CourseManagement.Domain.Users.ValueObjects;
 using CourseManagement.Infrastructure.Database;
@@ -24,6 +27,10 @@ public class FunctionalTestWebAppFactory : WebApplicationFactory<Program>, IAsyn
         .WithPassword("postgres")
         .Build();
 
+    private Guid StaffId { get; set; }
+    public Guid StudentId { get; private set; }
+    public Guid CourseId { get; set; }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         Environment.SetEnvironmentVariable("IS_TEST", "true");
@@ -44,7 +51,7 @@ public class FunctionalTestWebAppFactory : WebApplicationFactory<Program>, IAsyn
     {
         await _dbContainer.StartAsync();
 
-        await InitializeTestUserAsync();
+        await InitializeTestUsersAsync();
     }
 
     public new async Task DisposeAsync()
@@ -52,45 +59,80 @@ public class FunctionalTestWebAppFactory : WebApplicationFactory<Program>, IAsyn
         await _dbContainer.StopAsync();
     }
 
-    private async Task CreateStaffUser(
-        string email,
-        string password,
-        string? firstName,
-        string? lastName,
-        string department
-    )
+    private async Task CreateStaffUser()
     {
         await using var scope = Services.CreateAsyncScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
 
         var user = User.Create(
-            new Email(email),
+            new Email(UserData.Staff.Email),
             Role.Staff,
-            new Password(passwordHasher.Hash(password).Value)
+            new Password(passwordHasher.Hash(UserData.Staff.Password).Value)
         );
         dbContext.Users.Add(user);
 
         var staff = Staff.Create(
             user.Id,
-            firstName,
-            lastName,
+            UserData.Staff.FirstName,
+            UserData.Staff.LastName,
             null,
-            department
+            UserData.Staff.Department
         );
         dbContext.Staffs.Add(staff);
 
         await dbContext.SaveChangesAsync();
+
+        StaffId = staff.Id;
     }
 
-    private async Task InitializeTestUserAsync()
+    private async Task CreateStudentUser()
     {
-        await CreateStaffUser(
-            UserData.Email,
-            UserData.Password,
-            UserData.FirstName,
-            UserData.LastName,
-            UserData.Department
+        await using var scope = Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+
+        var user = User.Create(
+            new Email(UserData.Student.Email),
+            Role.Student,
+            new Password(passwordHasher.Hash(UserData.Student.Password).Value)
         );
+        dbContext.Users.Add(user);
+
+        var student = Student.Create(
+            user.Id,
+            UserData.Student.FirstName,
+            UserData.Student.LastName,
+            StaffId
+        );
+        dbContext.Students.Add(student);
+
+        await dbContext.SaveChangesAsync();
+
+        StudentId = student.Id;
+    }
+
+    private async Task CreateCourse()
+    {
+        await using var scope = Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        var course = Course.Create(
+            CourseData.Title,
+            CourseData.Description,
+            StaffId
+        );
+        dbContext.Courses.Add(course);
+
+        await dbContext.SaveChangesAsync();
+
+        CourseId = course.Id;
+    }
+
+    private async Task InitializeTestUsersAsync()
+    {
+        await CreateStaffUser();
+        await CreateStudentUser();
+        await CreateCourse();
     }
 }

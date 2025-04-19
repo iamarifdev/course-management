@@ -1,0 +1,29 @@
+﻿@using static System.Net.WebRequestMethods
+@using Blazored.LocalStorage
+@inject NavigationManager Navigation
+@inject ILocalStorageService LocalStorage
+
+<Router AppAssembly="@typeof(App).Assembly" OnNavigateAsync="HandleNavigation">
+  <Found Context="routeData">
+    <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+    <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+  </Found>
+  <NotFound>
+    <PageTitle>Not found</PageTitle>
+    <LayoutView Layout="@typeof(MainLayout)">
+      <p role="alert">Sorry, there's nothing at this address.</p>
+    </LayoutView>
+  </NotFound>
+</Router>
+
+@code {
+  private async Task HandleNavigation(NavigationContext args)
+  {
+    var accessToken = await LocalStorage.GetItemAsync<string>("accessToken");
+
+    if (string.IsNullOrEmpty(accessToken) && !args.Path.Contains("login", StringComparison.OrdinalIgnoreCase))
+    {
+      Navigation.NavigateTo("/login", true);
+    }
+  }
+}
