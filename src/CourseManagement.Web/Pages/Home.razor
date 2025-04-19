@@ -1,7 +1,122 @@
 ﻿@page "/"
+@using CourseManagement.Web.Models
+@inject HttpClient Http
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Course Management Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Course Management Dashboard</h1>
+    
+    @if (_errorMessage != null)
+    {
+        <div class="alert alert-danger mt-3" role="alert">
+            @_errorMessage
+        </div>
+    }
+    
+    <div class="row">
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card dashboard-card bg-primary text-white h-100">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                    <i class="bi bi-people-fill dashboard-icon"></i>
+                    <h2 class="mt-2 mb-0">@(_dashboardData?.StudentCount ?? 0)</h2>
+                    <p class="card-text">Students</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card dashboard-card bg-success text-white h-100">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                    <i class="bi bi-book-fill dashboard-icon"></i>
+                    <h2 class="mt-2 mb-0">@(_dashboardData?.CourseCount ?? 0)</h2>
+                    <p class="card-text">Courses</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card dashboard-card bg-info text-white h-100">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                    <i class="bi bi-calendar3 dashboard-icon"></i>
+                    <h2 class="mt-2 mb-0">@(_dashboardData?.ClassCount ?? 0)</h2>
+                    <p class="card-text">Classes</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card dashboard-card bg-warning text-white h-100">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                    <i class="bi bi-person-badge-fill dashboard-icon"></i>
+                    <h2 class="mt-2 mb-0">@(_dashboardData?.StaffCount ?? 0)</h2>
+                    <p class="card-text">Staff</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-Welcome to your new app.
+    @if (_isLoading)
+    {
+        <div class="d-flex justify-content-center mt-5">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .dashboard-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .dashboard-icon {
+        font-size: 2.5rem;
+    }
+    
+    h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+</style>
+
+@code {
+    private DashboardSummary? _dashboardData;
+    private bool _isLoading = true;
+    private string? _errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDashboardData();
+    }
+
+    private async Task LoadDashboardData()
+    {
+        try
+        {
+            _isLoading = true;
+            _errorMessage = null;
+            
+            // Replace with your actual API endpoint
+            _dashboardData = await Http.GetFromJsonAsync<DashboardSummary>("api/dashboard/counts");
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error loading dashboard data: {ex.Message}";
+            Console.WriteLine(ex);
+            // set default values for _dashboardData
+            _dashboardData = new DashboardSummary(StudentCount: 0, CourseCount: 0, ClassCount: 0, StaffCount: 0);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+}
