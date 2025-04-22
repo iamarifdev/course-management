@@ -21,6 +21,6 @@ public static class ClassErrors
         $"The class is associated with invalid/missing courses: {string.Join(", ", ids)}");
     
     public static readonly Error StudentAlreadyEnrolled = Error.Conflict(
-        "Course.StudentAlreadyEnrolled",
+        "Class.StudentAlreadyEnrolled",
         "The student is already enrolled in the class");
 }
